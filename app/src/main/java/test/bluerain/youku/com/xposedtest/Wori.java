@@ -2,6 +2,7 @@ package test.bluerain.youku.com.xposedtest;
 
 import android.location.LocationManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.xml.sax.Locator;
 
@@ -24,6 +25,7 @@ import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
  * Contact:<a href="mailto:8luerain@gmail.com">Contact_me_now</a>
  */
 public class Wori implements IXposedHookLoadPackage {
+    public static final String TAG = "Xposed";
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
         //com.autonavi.minimap
@@ -37,6 +39,8 @@ public class Wori implements IXposedHookLoadPackage {
 //        XposedBridge.hookAllMethods(LocationManager.class, "requestLocationUpdates", new XC_MethodHook() {
 //            @Override
 //            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+////                XposedBridge.log("hooked method requestLocationUpdates");
+//                Log.d(TAG, "hooked method requestLocationUpdates", new Exception());
 //                Object[] args = param.args;
 //                for (Object obj : args) {
 //                    if (null != obj) {
@@ -46,12 +50,12 @@ public class Wori implements IXposedHookLoadPackage {
 //                super.beforeHookedMethod(param);
 //            }
 //        });
-//
-//        HookManger.addHooks(new TelephoneHook());
-//        HookManger.addHooks(new RuntimeHook());
-//        HookManger.addHooks(new LocationMangerHook());
-//        HookManger.addHooks(new LocationListenerHook());
-//        HookManger.startHook(loadPackageParam.classLoader);
+////
+        HookManger.addHooks(new TelephoneHook());
+        HookManger.addHooks(new RuntimeHook());
+        HookManger.addHooks(new LocationMangerHook());
+        HookManger.addHooks(new LocationListenerHook());
+        HookManger.startHook(loadPackageParam.classLoader);
 
     }
 }
