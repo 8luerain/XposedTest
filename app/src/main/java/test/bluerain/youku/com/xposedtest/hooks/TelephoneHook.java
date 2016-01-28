@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XposedBridge;
 import test.bluerain.youku.com.xposedtest.data.HookInfo;
 
 /**
@@ -27,6 +28,8 @@ public class TelephoneHook extends BaseHook {
         hookInfoList.add(new HookInfo("getDeviceId", new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+
+                XposedBridge.log("hook getDeviceId method , IMEI have been set");
                 param.setResult("22222");
                 Log.d("Xposed", "--------------------------------setText");
                 super.afterHookedMethod(param);

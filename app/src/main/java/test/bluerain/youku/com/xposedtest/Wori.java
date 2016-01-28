@@ -1,20 +1,13 @@
 package test.bluerain.youku.com.xposedtest;
 
-import android.location.LocationManager;
 import android.text.TextUtils;
-import android.util.Log;
-
-import org.xml.sax.Locator;
-
-import java.util.Objects;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import test.bluerain.youku.com.xposedtest.hooks.LocationListenerHook;
+import test.bluerain.youku.com.xposedtest.hooks.InputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
+import test.bluerain.youku.com.xposedtest.hooks.OutputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.RuntimeHook;
 import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
 
@@ -54,7 +47,8 @@ public class Wori implements IXposedHookLoadPackage {
         HookManger.addHooks(new TelephoneHook());
         HookManger.addHooks(new RuntimeHook());
         HookManger.addHooks(new LocationMangerHook());
-        HookManger.addHooks(new LocationListenerHook());
+        HookManger.addHooks(new OutputStreamHook());
+        HookManger.addHooks(new InputStreamHook());
         HookManger.startHook(loadPackageParam.classLoader);
 
     }

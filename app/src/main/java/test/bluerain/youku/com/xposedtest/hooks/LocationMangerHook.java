@@ -1,7 +1,10 @@
 package test.bluerain.youku.com.xposedtest.hooks;
 
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
 
 import java.util.List;
 
@@ -32,6 +35,25 @@ public class LocationMangerHook extends BaseHook {
                 location.setLatitude(39.2222222);
                 param.setResult(location);
                 super.afterHookedMethod(param);
+            }
+        }));
+        hookInfoList.add(new HookInfo("requestSingleUpdate", Criteria.class, LocationListener.class, Looper.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hooked the method of onLocationChanged");
+                Object[] args = param.args;
+//                for (Object object : args) {
+//                    if (null==object){XposedBridge.log("卧槽，参数为空");}
+//                    else {
+//                        XposedBridge.log(object.toString());
+//                    }
+//                }
+                Location location = new Location(LocationManager.GPS_PROVIDER);
+                location.setLongitude(116.2317);
+                location.setLatitude(39.5427);
+                LocationListener listener = (LocationListener) args[1];
+                listener.onLocationChanged(location);
+                super.beforeHookedMethod(param);
             }
         }));
 
