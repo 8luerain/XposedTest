@@ -30,10 +30,67 @@ public class TelephoneHook extends BaseHook {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
                 XposedBridge.log("hook getDeviceId method , IMEI have been set");
-                param.setResult("22222");
-                Log.d("Xposed", "--------------------------------setText");
+                param.setResult("2222222222222222222222222");
                 super.afterHookedMethod(param);
             }
         }));
+
+        hookInfoList.add(new HookInfo("getSubscriberId", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hook getSubscriberId method , IMSI have been set");
+                param.setResult("2222222222222222222222222");
+                super.afterHookedMethod(param);
+            }
+        }));
+
+        hookInfoList.add(new HookInfo("getSimSerialNumber", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hook getSimSerialNumber method , SIM_Serial have been set");
+                param.setResult("2222222222222222222222222");
+                super.afterHookedMethod(param);
+            }
+        }));
+        hookInfoList.add(new HookInfo("getLine1Number", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hook getLine1Number method , PhoneNum have been set");
+                param.setResult("2222222222222222222222222");
+                super.afterHookedMethod(param);
+            }
+        }));
+
+        hookInfoList.add(new HookInfo("getSubscriberId", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hook getSimSerialNumber method , SIM_Serial have been set");
+                param.setResult("2222222222222222222222222");
+                super.afterHookedMethod(param);
+            }
+        }));
+
+
+
     }
 }
