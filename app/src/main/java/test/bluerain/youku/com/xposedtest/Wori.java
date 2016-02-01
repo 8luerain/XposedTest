@@ -2,14 +2,20 @@ package test.bluerain.youku.com.xposedtest;
 
 import android.text.TextUtils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import test.bluerain.youku.com.xposedtest.hooks.InputStreamHook;
+import test.bluerain.youku.com.xposedtest.hooks.FileOutputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
-import test.bluerain.youku.com.xposedtest.hooks.OutputStreamHook;
-import test.bluerain.youku.com.xposedtest.hooks.RuntimeHook;
-import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
+import test.bluerain.youku.com.xposedtest.hooks.SDCardStatuHook;
 
 /**
  * Project: XposedTest.
@@ -19,37 +25,70 @@ import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
  */
 public class Wori implements IXposedHookLoadPackage {
     public static final String TAG = "Xposed";
+
+
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
-        //com.autonavi.minimap
-        XposedBridge.log("wohhhhhh----------------------------->" + loadPackageParam.packageName);
+
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
 //        if (!TextUtils.equals(loadPackageParam.packageName, "xiaomeng.bupt.com.demo"))
         if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab"))
             return;
 
-//        XposedBridge.hookAllMethods(LocationManager.class, "requestLocationUpdates", new XC_MethodHook() {
+//        XposedBridge.hookAllConstructors(File.class, new Handler());
+        // public FileOutputStream(File file, boolean append) thro
+//        XposedHelpers.findAndHookConstructor(FileOutputStream.class, File.class, boolean.class, new XC_MethodHook() {
 //            @Override
 //            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-////                XposedBridge.log("hooked method requestLocationUpdates");
-//                Log.d(TAG, "hooked method requestLocationUpdates", new Exception());
-//                Object[] args = param.args;
-//                for (Object obj : args) {
-//                    if (null != obj) {
-//                        XposedBridge.log("arg is " + obj.toString());
-//                    }
-//                }
+//                File inputFile = (File) param.args[0];
+//                XposedBridge.log("input file is ------>" + inputFile.getAbsolutePath());
 //                super.beforeHookedMethod(param);
 //            }
+//
+//            @Override
+//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                super.afterHookedMethod(param);
+//            }
 //        });
-////
-        HookManger.addHooks(new TelephoneHook());
-        HookManger.addHooks(new RuntimeHook());
+//        HookManger.addHooks(new TelephoneHook());
+//        HookManger.addHooks(new RuntimeHook());
         HookManger.addHooks(new LocationMangerHook());
-        HookManger.addHooks(new OutputStreamHook());
-        HookManger.addHooks(new InputStreamHook());
+        HookManger.addHooks(new SDCardStatuHook());
+//        HookManger.addHooks(new FileOutputStreamHook());
+//        HookManger.addHooks(new OutputStreamHook());
+//        HookManger.addHooks(new InputStreamHook());
         HookManger.startHook(loadPackageParam.classLoader);
 
+    }
+
+
+    class Handler extends XC_MethodHook {
+        public static final String filePath = "storage/emulated/0/uber_save_file";
+        private FileWriter writer;
+
+        public Handler() {
+            try {
+                writer = new FileWriter(new File(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+            super.beforeHookedMethod(param);
+        }
+
+        @Override
+        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+            File file = (File) param.thisObject;
+            if (!file.isDirectory() && (!file.getName().contains(".apk") && (!file.getName().contains(".so")))) {
+                XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
+                writer.append(file.toString() + "\n");
+            }
+            writer.flush();
+            super.afterHookedMethod(param);
+        }
     }
 }

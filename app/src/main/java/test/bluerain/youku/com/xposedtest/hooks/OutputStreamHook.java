@@ -1,5 +1,6 @@
 package test.bluerain.youku.com.xposedtest.hooks;
 
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class OutputStreamHook extends BaseHook {
                 String s = new String(dataByte);
                 XposedBridge.log("output---------------------------\n " + s);
                 super.beforeHookedMethod(param);
+
             }
         }));
 
