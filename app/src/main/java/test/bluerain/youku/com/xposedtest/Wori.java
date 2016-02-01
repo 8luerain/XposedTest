@@ -2,20 +2,15 @@ package test.bluerain.youku.com.xposedtest;
 
 import android.text.TextUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import test.bluerain.youku.com.xposedtest.hooks.FileOutputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
-import test.bluerain.youku.com.xposedtest.hooks.SDCardStatuHook;
 
 /**
  * Project: XposedTest.
@@ -36,8 +31,7 @@ public class Wori implements IXposedHookLoadPackage {
         if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab"))
             return;
 
-//        XposedBridge.hookAllConstructors(File.class, new Handler());
-        // public FileOutputStream(File file, boolean append) thro
+        XposedBridge.hookAllConstructors(File.class, new Handler());
 //        XposedHelpers.findAndHookConstructor(FileOutputStream.class, File.class, boolean.class, new XC_MethodHook() {
 //            @Override
 //            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -51,10 +45,19 @@ public class Wori implements IXposedHookLoadPackage {
 //                super.afterHookedMethod(param);
 //            }
 //        });
+
+//        XposedBridge.hookAllConstructors(File.class, new XC_MethodHook() {
+//            @Override
+//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                Log.d(TAG, param.thisObject.toString());
+//                super.afterHookedMethod(param);
+//            }
+//        });
 //        HookManger.addHooks(new TelephoneHook());
 //        HookManger.addHooks(new RuntimeHook());
         HookManger.addHooks(new LocationMangerHook());
-        HookManger.addHooks(new SDCardStatuHook());
+//        HookManger.addHooks(new SDCardStatuHook());
+
 //        HookManger.addHooks(new FileOutputStreamHook());
 //        HookManger.addHooks(new OutputStreamHook());
 //        HookManger.addHooks(new InputStreamHook());
@@ -83,7 +86,7 @@ public class Wori implements IXposedHookLoadPackage {
         @Override
         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
             File file = (File) param.thisObject;
-            if (!file.isDirectory() && (!file.getName().contains(".apk") && (!file.getName().contains(".so")))) {
+            if (!file.isDirectory() && (!(file.getName().contains(".apk")) && (!(file.getName().contains(".so"))))) {
                 XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
                 writer.append(file.toString() + "\n");
             }
@@ -91,4 +94,5 @@ public class Wori implements IXposedHookLoadPackage {
             super.afterHookedMethod(param);
         }
     }
+
 }
