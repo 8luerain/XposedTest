@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import test.bluerain.youku.com.xposedtest.data.HookInfo;
 
 /**

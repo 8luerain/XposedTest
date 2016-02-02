@@ -1,5 +1,7 @@
 package test.bluerain.youku.com.xposedtest;
 
+import android.app.ActivityManager;
+import android.content.pm.IPackageDataObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,10 +16,13 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -65,6 +70,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clearFile();
+//                clearAppData();
             }
         });
     }
@@ -76,6 +82,7 @@ public class Main2Activity extends AppCompatActivity {
 
     class FileInfoHandler implements Handler.Callback {
         public static final int ADD_FILE = 1;
+        public static final int CLEAE_DATA = 2;
 
         @Override
         public boolean handleMessage(Message msg) {
@@ -84,6 +91,12 @@ public class Main2Activity extends AppCompatActivity {
                     Log.d(TAG, "message recivice" + mStringList.size());
                     mFileInfoAdapter.notifyDataSetChanged();
                     break;
+                case CLEAE_DATA:
+                    if (msg.arg1 == 3) {
+                        Log.d(TAG, "clear data success");
+                    } else {
+                        Log.d(TAG, "clear data failed");
+                    }
             }
             return false;
         }
@@ -96,10 +109,24 @@ public class Main2Activity extends AppCompatActivity {
             while (iterator.hasNext()) {
                 String next = iterator.next();
                 File file = new File(next);
-                if (file.exists()) {
+                if (!file.isDirectory()) {
                     iterator.remove();
-                    Log.d(TAG, "find file name is " + file.getAbsolutePath());
-                    file.delete();
+                    boolean delete = file.delete();
+                    if (!delete && next.contains("data/data") && (!next.contains("lib"))){
+                        try {
+                            Runtime runtime = Runtime.getRuntime();
+                            Process proc = runtime.exec("su");
+                            DataOutputStream os = new DataOutputStream(proc.getOutputStream());
+                            String commnd = "rm "+next+"\n";
+                            Log.d(TAG, "command is " + commnd);
+                            os.writeBytes(commnd);
+                            os.flush();
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                 }
             }
             new File(Wori.Handler.filePath).delete();
@@ -111,6 +138,33 @@ public class Main2Activity extends AppCompatActivity {
         new GetUberCacheThread().start();
     }
 
+    private void clearAppData() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        try {
+            Class<?> aClass = Class.forName("android.app.ActivityManager");
+            Method clearApplicationUserData = aClass.getMethod("clearApplicationUserData", String.class, IPackageDataObserver.class);
+            clearApplicationUserData.invoke(manager, "com.ubercab", null);
+            Log.d(TAG, "clear data");
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class ClearUserDataObserver extends IPackageDataObserver.Stub {
+        public void onRemoveCompleted(final String packageName, final boolean succeeded) {
+            Log.d(TAG, "clear result is -->" + succeeded);
+            final Message msg = mHandler.obtainMessage(FileInfoHandler.CLEAE_DATA);
+            msg.arg1 = succeeded ? 3 : 4;
+            mHandler.sendMessage(msg);
+        }
+    }
 
     class GetUberCacheThread extends Thread {
         BufferedReader mBufferedReader;
