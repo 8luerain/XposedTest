@@ -8,6 +8,7 @@ import java.util.List;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import test.bluerain.youku.com.xposedtest.data.HookInfo;
+import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 
 /**
  * Project: XposedTest.
@@ -30,7 +31,7 @@ public class TelephoneHook extends BaseHook {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
                 XposedBridge.log("hook getDeviceId method , IMEI have been set");
-                param.setResult("2222222222222222222222222");
+                param.setResult(CommonUtils.getRandomNumByLine(0));
                 super.afterHookedMethod(param);
             }
         }));
@@ -44,7 +45,7 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getSubscriberId method , IMSI have been set");
-                param.setResult("2222222222222222222222222");
+                param.setResult(CommonUtils.getRandomNumByLine(1));
                 super.afterHookedMethod(param);
             }
         }));
@@ -58,7 +59,7 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getSimSerialNumber method , SIM_Serial have been set");
-                param.setResult("2222222222222222222222222");
+                param.setResult(CommonUtils.getRandomNumByLine(4));
                 super.afterHookedMethod(param);
             }
         }));
@@ -71,26 +72,10 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getLine1Number method , PhoneNum have been set");
-                param.setResult("2222222222222222222222222");
+                param.setResult(CommonUtils.getRandomNumByLine(5));
                 super.afterHookedMethod(param);
             }
         }));
-
-        hookInfoList.add(new HookInfo("getSubscriberId", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                super.beforeHookedMethod(param);
-            }
-
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("hook getSimSerialNumber method , SIM_Serial have been set");
-                param.setResult("2222222222222222222222222");
-                super.afterHookedMethod(param);
-            }
-        }));
-
-
 
     }
 }

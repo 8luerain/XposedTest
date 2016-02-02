@@ -1,5 +1,13 @@
 package test.bluerain.youku.com.xposedtest.utils;
 
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+
 /**
  * Project: remoteXposedTest.
  * Data: 2016/1/28.
@@ -37,5 +45,41 @@ public class CommonUtils {
 
         return getRandomMixString(length).toUpperCase();
 
+    }
+
+    public static String getRandomNumByLine(int i) {
+        File file = new File("/storage/emulated/0/uber_random");
+        LineNumberReader lineNumberReader = null;
+        StringBuilder builder = new StringBuilder();
+        try {
+            if (file.exists()) {
+                lineNumberReader = new LineNumberReader(new FileReader(file));
+                String tmp = null;
+                while ((tmp = lineNumberReader.readLine()) != null) {
+                    builder.append(tmp + "\n");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != lineNumberReader) {
+                try {
+                    lineNumberReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        String fileString = builder.toString();
+        Log.d("TAG", "Read num is --->" + fileString);
+        String[] split = fileString.split("\\n");
+        if (split != null) {
+            String value = split[i];
+            Log.d("TAG", "Read sub is --->" + value);
+            return value;
+        }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package test.bluerain.youku.com.xposedtest;
 
+import android.os.Build;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -9,8 +10,15 @@ import java.io.IOException;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import test.bluerain.youku.com.xposedtest.hooks.InputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
+import test.bluerain.youku.com.xposedtest.hooks.OutputStreamHook;
+import test.bluerain.youku.com.xposedtest.hooks.RuntimeHook;
+import test.bluerain.youku.com.xposedtest.hooks.SettingHook;
+import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
+import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 
 /**
  * Project: XposedTest.
@@ -53,14 +61,16 @@ public class Wori implements IXposedHookLoadPackage {
 //                super.afterHookedMethod(param);
 //            }
 //        });
-//        HookManger.addHooks(new TelephoneHook());
-//        HookManger.addHooks(new RuntimeHook());
+        XposedHelpers.setStaticObjectField(Build.class, "SERIAL", CommonUtils.getRandomNumByLine(3));
+        HookManger.addHooks(new TelephoneHook());
+        HookManger.addHooks(new RuntimeHook());
+        HookManger.addHooks(new SettingHook());
         HookManger.addHooks(new LocationMangerHook());
 //        HookManger.addHooks(new SDCardStatuHook());
 
 //        HookManger.addHooks(new FileOutputStreamHook());
-//        HookManger.addHooks(new OutputStreamHook());
-//        HookManger.addHooks(new InputStreamHook());
+        HookManger.addHooks(new OutputStreamHook());
+        HookManger.addHooks(new InputStreamHook());
         HookManger.startHook(loadPackageParam.classLoader);
 
     }
@@ -87,7 +97,7 @@ public class Wori implements IXposedHookLoadPackage {
         protected void afterHookedMethod(MethodHookParam param) throws Throwable {
             File file = (File) param.thisObject;
             if (!file.isDirectory() && (!(file.getName().contains(".apk")) && (!(file.getName().contains(".so"))))) {
-                XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
+//                XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
                 writer.append(file.toString() + "\n");
             }
             writer.flush();
