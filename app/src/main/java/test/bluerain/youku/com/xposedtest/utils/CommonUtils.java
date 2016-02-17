@@ -1,10 +1,12 @@
 package test.bluerain.youku.com.xposedtest.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
@@ -81,5 +83,32 @@ public class CommonUtils {
             return value;
         }
         return null;
+    }
+
+    public static void copyFile(String sourceFile, String desFile) throws Exception {
+        Log.d("TAG", desFile);
+        if (TextUtils.isEmpty(sourceFile) || TextUtils.isEmpty(desFile))
+            return;
+        File source = new File(sourceFile);
+        File des = new File(desFile);
+        FileReader reader = null;
+        FileWriter writer = null;
+
+        if (!source.exists()) {
+            throw new Exception("Source file do not exist");
+        }
+
+        if (!des.exists())
+            des.createNewFile();
+
+        reader = new FileReader(sourceFile);
+        writer = new FileWriter(des);
+        char[] buf = new char[1024];
+        while (reader.read(buf) != -1) {
+            writer.write(buf);
+        }
+        writer.flush();
+        reader.close();
+        writer.close();
     }
 }

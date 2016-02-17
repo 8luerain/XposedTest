@@ -23,6 +23,19 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/id_btn_main_get"
             android:text="清理文件"/>
+
+        <Button
+            android:id="@+id/id_btn_main_save"
+            android:layout_width="wrap_content"
+            android:text="保存"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/id_btn_main_restore"
+            android:layout_width="wrap_content"
+            android:text="恢复"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
 

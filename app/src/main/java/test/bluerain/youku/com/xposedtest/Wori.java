@@ -32,35 +32,16 @@ public class Wori implements IXposedHookLoadPackage {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
+        XposedBridge.log("loading -------> " + loadPackageParam.packageName);
 
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
 //        if (!TextUtils.equals(loadPackageParam.packageName, "xiaomeng.bupt.com.demo"))
-        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab"))
+        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
             return;
+        }
 
         XposedBridge.hookAllConstructors(File.class, new Handler());
-//        XposedHelpers.findAndHookConstructor(FileOutputStream.class, File.class, boolean.class, new XC_MethodHook() {
-//            @Override
-//            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-//                File inputFile = (File) param.args[0];
-//                XposedBridge.log("input file is ------>" + inputFile.getAbsolutePath());
-//                super.beforeHookedMethod(param);
-//            }
-//
-//            @Override
-//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                super.afterHookedMethod(param);
-//            }
-//        });
-
-//        XposedBridge.hookAllConstructors(File.class, new XC_MethodHook() {
-//            @Override
-//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-//                Log.d(TAG, param.thisObject.toString());
-//                super.afterHookedMethod(param);
-//            }
-//        });
         XposedHelpers.setStaticObjectField(Build.class, "SERIAL", CommonUtils.getRandomNumByLine(3));
         HookManger.addHooks(new TelephoneHook());
         HookManger.addHooks(new RuntimeHook());
