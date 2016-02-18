@@ -85,7 +85,7 @@ public class Main2Activity extends AppCompatActivity {
                 getUberCacheFile();
                 initEditView();
                 saveRandomValue2File();
-                clearFile();
+//                clearFile();
             }
         });
         mButtonClear.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +183,7 @@ public class Main2Activity extends AppCompatActivity {
         });
     }
 
-    private void clearFile() {
+    private synchronized void clearFile() {
         if (mStringList != null && mStringList.size() != 0) {
             Iterator<String> iterator = mStringList.iterator();
             while (iterator.hasNext()) {
