@@ -85,6 +85,7 @@ public class Main2Activity extends AppCompatActivity {
                 getUberCacheFile();
                 initEditView();
                 saveRandomValue2File();
+                Toast.makeText(Main2Activity.this, "随机成功", Toast.LENGTH_SHORT).show();
 //                clearFile();
             }
         });
@@ -92,6 +93,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clearFile();
+                Toast.makeText(Main2Activity.this, "清理完成", Toast.LENGTH_SHORT).show();
 //                clearAppData();
             }
         });

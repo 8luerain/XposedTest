@@ -1,7 +1,6 @@
 package test.bluerain.youku.com.xposedtest.hooks;
 
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import java.util.List;
 
@@ -32,6 +31,7 @@ public class TelephoneHook extends BaseHook {
 
                 XposedBridge.log("hook getDeviceId method , IMEI have been set");
                 param.setResult(CommonUtils.getRandomNumByLine(0));
+
                 super.afterHookedMethod(param);
             }
         }));
