@@ -12,6 +12,25 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:id="@+id/id_btn_main_setDefault"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="设为默认"/>
+
+        <Button
+            android:id="@+id/id_btn_main_restroeDefault"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="恢复默认"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
             android:id="@+id/id_btn_main_get"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,14 +46,14 @@
         <Button
             android:id="@+id/id_btn_main_save"
             android:layout_width="wrap_content"
-            android:text="保存"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="保存"/>
 
         <Button
             android:id="@+id/id_btn_main_restore"
             android:layout_width="wrap_content"
-            android:text="恢复"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="恢复"/>
 
     </LinearLayout>
 
@@ -148,6 +167,7 @@
             android:textSize="20sp"/>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

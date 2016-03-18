@@ -44,14 +44,16 @@ public class Wori implements IXposedHookLoadPackage {
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
 //        if (!TextUtils.equals(loadPackageParam.packageName, "xiaomeng.bupt.com.demo"))
-        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
+//        if (!TextUtils.equals(loadPackageParam.packageName, "com.sankuai.meituan"))
+        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab"))
+        {
             return;
         }
         Context tempContext = MyApplication.getContext();
         Log.d(TAG, "context status is " + tempContext);
         if (null != tempContext)
             Toast.makeText(tempContext, "颤抖吧，Uber", Toast.LENGTH_SHORT).show();
-        XposedBridge.hookAllConstructors(File.class, new Handler());
+        XposedBridge.hookAllConstructors(File.class, new FileHandler());
         XposedHelpers.setStaticObjectField(Build.class, "SERIAL", CommonUtils.getRandomNumByLine(3));
         XposedHelpers.setStaticObjectField(Build.class, "MODEL", CommonUtils.getRandomMixUpcaseString(5));
         XposedHelpers.setStaticObjectField(Build.VERSION.class, "RELEASE", "5.0." + CommonUtils.getRandomNumString(1));
@@ -70,11 +72,11 @@ public class Wori implements IXposedHookLoadPackage {
     }
 
 
-    class Handler extends XC_MethodHook {
+    class FileHandler extends XC_MethodHook {
         public static final String filePath = "storage/emulated/0/uber_save_file";
         private FileWriter writer;
 
-        public Handler() {
+        public FileHandler() {
             try {
                 writer = new FileWriter(new File(filePath));
             } catch (IOException e) {
@@ -92,8 +94,8 @@ public class Wori implements IXposedHookLoadPackage {
             try {
                 File file = (File) param.thisObject;
                 if (!file.isDirectory() && (!(file.getName().contains(".apk")) && (!(file.getName().contains(".so"))))) {
-                    //                XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
-                    writer.append(file.toString() + "\n");
+                                    XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
+//                    writer.append(file.toString() + "\n");
                 }
                 writer.flush();
             } catch (IOException e) {
