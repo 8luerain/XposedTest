@@ -1,17 +1,20 @@
 package test.bluerain.youku.com.xposedtest;
 
-import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.pm.IPackageDataObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -20,13 +23,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
+import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
+import test.bluerain.youku.com.xposedtest.utils.Profile;
 
 public class Main2Activity extends AppCompatActivity {
     public static final String TAG = "Xposed";
@@ -35,6 +38,10 @@ public class Main2Activity extends AppCompatActivity {
     private ListView mFileListView;
     private Button mButtonGet;
     private Button mButtonClear;
+    private Button mButtonSave;
+    private Button mButtonRestore;
+    private Button mSetDefault;
+    private Button mRestoreDefault;
     /*---编辑区----start*/
     private EditText mEditText_imei;
     private EditText mEditText_imsi;
@@ -46,6 +53,10 @@ public class Main2Activity extends AppCompatActivity {
     private ArrayAdapter<String> mFileInfoAdapter;
 
     public static final String sRandomFilePath = "/storage/emulated/0/uber_random";
+    public static final String sRandomSaveDirPath = "/storage/emulated/0/uber_save";
+
+    public static final int SAVE_FILE_FLAG = 0;
+    public static final int RESTORE_FILE_FLAG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +77,72 @@ public class Main2Activity extends AppCompatActivity {
         mFileListView.setAdapter(mFileInfoAdapter);
         mButtonGet = (Button) findViewById(R.id.id_btn_main_get);
         mButtonClear = (Button) findViewById(R.id.id_btn_main_clear);
+        mButtonSave = (Button) findViewById(R.id.id_btn_main_save);
+        mButtonRestore = (Button) findViewById(R.id.id_btn_main_restore);
+        mSetDefault = (Button) findViewById(R.id.id_btn_main_setDefault);
+        mRestoreDefault = (Button) findViewById(R.id.id_btn_main_restroeDefault);
         mButtonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getUberCacheFile();
                 initEditView();
                 saveRandomValue2File();
+                Toast.makeText(Main2Activity.this, "随机成功", Toast.LENGTH_SHORT).show();
+//                clearFile();
             }
         });
         mButtonClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearFile();
+                Toast.makeText(Main2Activity.this, "清理完成", Toast.LENGTH_SHORT).show();
 //                clearAppData();
+//                CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME, new ClearUserDataObserver());
+                CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
+                CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
+                CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
+            }
+        });
+        mButtonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File file = new File(sRandomSaveDirPath);
+                if (!file.exists()) {
+                    file.mkdir();
+                }
+                showFileDialog(SAVE_FILE_FLAG);
+            }
+        });
+        mButtonRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileDialog(RESTORE_FILE_FLAG);
+            }
+        });
+
+        mSetDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    CommonUtils.copyFile(sRandomFilePath, sRandomSaveDirPath + "/" + "default");
+                    Toast.makeText(Main2Activity.this, "保存成功~~", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mRestoreDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    CommonUtils.copyFile(sRandomSaveDirPath + "/" + "default", sRandomFilePath);
+                    restoreRandomSurface();
+                    Toast.makeText(Main2Activity.this, "恢复成功~~", Toast.LENGTH_SHORT).show();
+                    CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -111,8 +175,59 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
+    private void showFileDialog(final int flag) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.show();
+        alertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.getWindow().setContentView(R.layout.layout_dialog_save_file);
+        final EditText fileNameText = (EditText) alertDialog.getWindow().findViewById(R.id.id_edt_layout_filename);
+        Button ok = (Button) alertDialog.getWindow().findViewById(R.id.id_btn_layout_dialog_ok);
+        Button cancle = (Button) alertDialog.getWindow().findViewById(R.id.id_btn_layout_dialog_cancle);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = fileNameText.getText().toString().trim();
+                if (TextUtils.isEmpty(text)) {
+                    Toast.makeText(Main2Activity.this, "文件名为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    if (flag == SAVE_FILE_FLAG) {
+                        CommonUtils.copyFile(sRandomFilePath, sRandomSaveDirPath + "/" + text);
+                        Toast.makeText(Main2Activity.this, "保存成功~~", Toast.LENGTH_SHORT).show();
+                    } else if (flag == RESTORE_FILE_FLAG) {
+                        File file = new File(sRandomFilePath);
+                        if (file.exists())
+                            file.delete();
+                        CommonUtils.copyFile(sRandomSaveDirPath + "/" + text, sRandomFilePath);
+                        restoreRandomSurface();
+                        Toast.makeText(Main2Activity.this, "恢复成功~~", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(Main2Activity.this, "源文件不存在", Toast.LENGTH_SHORT).show();
+                }
+                alertDialog.dismiss();
+            }
+        });
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
 
-    private void clearFile() {
+    private void restoreRandomSurface() {
+        mEditText_imei.setText(CommonUtils.getRandomNumByLine(0));
+        mEditText_imsi.setText(CommonUtils.getRandomNumByLine(1));
+        mEditText_android.setText(CommonUtils.getRandomNumByLine(2));
+        mEditText_serial.setText(CommonUtils.getRandomNumByLine(3));
+        mEditText_sim_id.setText(CommonUtils.getRandomNumByLine(4));
+        mEditText_phone_num.setText(CommonUtils.getRandomNumByLine(5));
+    }
+
+    private synchronized void clearFile() {
         if (mStringList != null && mStringList.size() != 0) {
             Iterator<String> iterator = mStringList.iterator();
             while (iterator.hasNext()) {
@@ -124,7 +239,7 @@ public class Main2Activity extends AppCompatActivity {
                     iterator.remove();
                 }
             }
-            new File(Wori.Handler.filePath).delete();
+            new File(Wori.FileHandler.filePath).delete();
             mFileInfoAdapter.notifyDataSetChanged();
         }
     }
@@ -133,31 +248,14 @@ public class Main2Activity extends AppCompatActivity {
         new GetUberCacheThread().start();
     }
 
-    private void clearAppData() {
-        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        try {
-            Class<?> aClass = Class.forName("android.app.ActivityManager");
-            Method clearApplicationUserData = aClass.getMethod("clearApplicationUserData", String.class, IPackageDataObserver.class);
-            clearApplicationUserData.invoke(manager, "com.ubercab", null);
-            Log.d(TAG, "clear data");
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
 
     class ClearUserDataObserver extends IPackageDataObserver.Stub {
         public void onRemoveCompleted(final String packageName, final boolean succeeded) {
             Log.d(TAG, "clear result is -->" + succeeded);
-            final Message msg = mHandler.obtainMessage(FileInfoHandler.CLEAE_DATA);
-            msg.arg1 = succeeded ? 3 : 4;
-            mHandler.sendMessage(msg);
+//            final Message msg = mHandler.obtainMessage(FileInfoHandler.CLEAE_DATA);
+//            msg.arg1 = succeeded ? 3 : 4;
+//            mHandler.sendMessage(msg);
+            Toast.makeText(MyApplication.getContext(), packageName + "data remove successed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -167,7 +265,7 @@ public class Main2Activity extends AppCompatActivity {
 
         public GetUberCacheThread() {
             try {
-                cacheFile = new File(Wori.Handler.filePath);
+                cacheFile = new File(Wori.FileHandler.filePath);
                 if (cacheFile.exists()) {
                     mBufferedReader = new BufferedReader(new FileReader(cacheFile));
                 }
@@ -243,12 +341,9 @@ public class Main2Activity extends AppCompatActivity {
         File file = new File(sRandomFilePath);
         FileWriter writer = null;
         try {
-            if (!file.exists()) {
-                file.createNewFile();
-            } else {
+            if (file.exists())
                 file.delete();
-                file.createNewFile();
-            }
+            file.createNewFile();
             writer = new FileWriter(file);
             writer.write(mEditText_imei.getText().toString() + "\n");
             writer.write(mEditText_imsi.getText().toString() + "\n");
