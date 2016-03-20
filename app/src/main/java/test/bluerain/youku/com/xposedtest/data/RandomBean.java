@@ -29,7 +29,7 @@ public class RandomBean implements Serializable {
         random_sim_serial = "898601" + CommonUtils.getRandomNumString(14);
         random_phone_num = "132" + CommonUtils.getRandomNumString(8);
         random_build_model = CommonUtils.getRandomMixUpcaseString(5);
-        random_build_serial = CommonUtils.getRandomNumByLine(3);
+        random_build_serial = CommonUtils.getRandomMixString(10);
         random_os_version = "5.0." + CommonUtils.getRandomNumString(1);
     }
 

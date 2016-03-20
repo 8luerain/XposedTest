@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
-import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 import test.bluerain.youku.com.xposedtest.utils.Profile;
 
@@ -50,6 +49,8 @@ public class Main2Activity extends AppCompatActivity {
     private EditText mEditText_serial;
     private EditText mEditText_sim_id;
     private EditText mEditText_phone_num;
+    private EditText mEditText_build_serial;
+    private EditText mEditText_build_model;
     /*---编辑区----end*/
     private ArrayAdapter<String> mFileInfoAdapter;
 
@@ -76,6 +77,8 @@ public class Main2Activity extends AppCompatActivity {
         mEditText_android = (EditText) findViewById(R.id.id_edt_main_android_id);
         mEditText_sim_id = (EditText) findViewById(R.id.id_edt_main_sim);
         mEditText_phone_num = (EditText) findViewById(R.id.id_edt_main_phone_num);
+        mEditText_build_serial = (EditText) findViewById(R.id.id_edt_main_build_serial);
+        mEditText_build_model = (EditText) findViewById(R.id.id_edt_main_build_model);
         mFileListView = (ListView) findViewById(R.id.id_lv_main);
         mFileListView.setAdapter(mFileInfoAdapter);
         mButtonGet = (Button) findViewById(R.id.id_btn_main_get);
@@ -126,7 +129,7 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     CommonUtils.copyFile(sRandomFilePath, sRandomSaveDirPath + "/" + "default");
-                    Toast.makeText(Main2Activity.this, "保存成功~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main2Activity.this, "设置默认成功~~", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,9 +141,10 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     CommonUtils.copyFile(sRandomSaveDirPath + "/" + "default", sRandomFilePath);
-                    restoreRandomSurface();
-                    Toast.makeText(Main2Activity.this, "恢复成功~~", Toast.LENGTH_SHORT).show();
-                    CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
+                    mRandombean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+                    initEditView();
+                    Toast.makeText(Main2Activity.this, "恢复默认成功~~", Toast.LENGTH_SHORT).show();
+//                    CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -335,6 +339,8 @@ public class Main2Activity extends AppCompatActivity {
         mEditText_android.setText(mRandombean.getRandom_android());
         mEditText_sim_id.setText(mRandombean.getRandom_sim_serial());
         mEditText_phone_num.setText(mRandombean.getRandom_phone_num());
+        mEditText_build_serial.setText(mRandombean.getRandom_build_serial());
+        mEditText_build_model.setText(mRandombean.getRandom_build_model());
     }
 
     private void saveRandomValue2File() {
