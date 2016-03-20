@@ -6,14 +6,21 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import test.bluerain.youku.com.xposedtest.data.RandomBean;
 
 /**
  * Project: remoteXposedTest.
@@ -27,6 +34,8 @@ public class CommonUtils {
     private static final String BOOHEE_PACKAGE_NAME = "com.ubercab";
 
     private static final String CMD_CLEAR_APP_DATA = "pm clear ";
+
+    private static final String CMD_CLEAR_APP_DATA_SD = "rm -R /storage/emulated/0/Android/*";
 
     private static final String CMD_FORCE_STOP_APP = "am force-stop ";
 
@@ -125,6 +134,46 @@ public class CommonUtils {
         writer.close();
     }
 
+    public static RandomBean getRandomBean(String filePath) {
+        RandomBean bean = null;
+        File file = new File(filePath);
+        ObjectInputStream inputStream = null;
+        if (!file.exists()) {
+            return bean;
+        }
+        try {
+            inputStream = new ObjectInputStream(new FileInputStream(file));
+            bean = (RandomBean) inputStream.readObject();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuiltly(inputStream);
+        }
+
+        return bean;
+    }
+
+    public static boolean saveRandomBean(String filePath, RandomBean bean) {
+        File file = new File(filePath);
+        ObjectOutputStream outputStream = null;
+        if (!file.exists()) {
+            return false;
+        }
+        try {
+            outputStream = new ObjectOutputStream(new FileOutputStream(file));
+            outputStream.writeObject(bean);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuiltly(outputStream);
+        }
+
+        return true;
+    }
 
     /**
      * 启动薄荷App
@@ -201,5 +250,15 @@ public class CommonUtils {
     public static void forceStopApp(String packageName) {
         String s = do_exec_with_root(CMD_FORCE_STOP_APP + packageName);
         Log.d("TAG", "force stop result is " + s + "..........");
+    }
+
+    public static void closeQuiltly(Closeable closeable) {
+        if (null != closeable) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

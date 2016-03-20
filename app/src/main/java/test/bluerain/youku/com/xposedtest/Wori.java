@@ -1,10 +1,8 @@
 package test.bluerain.youku.com.xposedtest;
 
-import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,6 +13,8 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import test.bluerain.youku.com.xposedtest.data.RandomBean;
+import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
 import test.bluerain.youku.com.xposedtest.hooks.InputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
 import test.bluerain.youku.com.xposedtest.hooks.OutputStreamHook;
@@ -23,6 +23,7 @@ import test.bluerain.youku.com.xposedtest.hooks.SettingHook;
 import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
 import test.bluerain.youku.com.xposedtest.hooks.WifiHook;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
+import test.bluerain.youku.com.xposedtest.utils.Profile;
 
 /**
  * Project: XposedTest.
@@ -32,6 +33,8 @@ import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
  */
 public class Wori implements IXposedHookLoadPackage {
     public static final String TAG = "Xposed";
+
+    public RandomBean bean;
 
     public Wori() {
         Log.d("TAG", "Wori class created ......................");
@@ -45,18 +48,15 @@ public class Wori implements IXposedHookLoadPackage {
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
 //        if (!TextUtils.equals(loadPackageParam.packageName, "xiaomeng.bupt.com.demo"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.sankuai.meituan"))
-        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab"))
-        {
+        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
             return;
         }
-        Context tempContext = MyApplication.getContext();
-        Log.d(TAG, "context status is " + tempContext);
-        if (null != tempContext)
-            Toast.makeText(tempContext, "颤抖吧，Uber", Toast.LENGTH_SHORT).show();
+        bean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+        BaseHook.setRandomBean(bean);
         XposedBridge.hookAllConstructors(File.class, new FileHandler());
-        XposedHelpers.setStaticObjectField(Build.class, "SERIAL", CommonUtils.getRandomNumByLine(3));
-        XposedHelpers.setStaticObjectField(Build.class, "MODEL", CommonUtils.getRandomMixUpcaseString(5));
-        XposedHelpers.setStaticObjectField(Build.VERSION.class, "RELEASE", "5.0." + CommonUtils.getRandomNumString(1));
+        XposedHelpers.setStaticObjectField(Build.class, "SERIAL", bean.getRandom_serial());
+        XposedHelpers.setStaticObjectField(Build.class, "MODEL", bean.getRandom_build_model());
+        XposedHelpers.setStaticObjectField(Build.VERSION.class, "RELEASE", bean.getRandom_os_version());
         HookManger.addHooks(new TelephoneHook());
         HookManger.addHooks(new RuntimeHook());
         HookManger.addHooks(new WifiHook());
@@ -94,7 +94,7 @@ public class Wori implements IXposedHookLoadPackage {
             try {
                 File file = (File) param.thisObject;
                 if (!file.isDirectory() && (!(file.getName().contains(".apk")) && (!(file.getName().contains(".so"))))) {
-                                    XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
+                    XposedBridge.log("----------<>---------------->>>> " + param.thisObject);
 //                    writer.append(file.toString() + "\n");
                 }
                 writer.flush();

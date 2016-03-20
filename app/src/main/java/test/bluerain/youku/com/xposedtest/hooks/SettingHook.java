@@ -2,6 +2,7 @@ package test.bluerain.youku.com.xposedtest.hooks;
 
 import android.content.ContentResolver;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.util.List;
 
@@ -31,9 +32,10 @@ public class SettingHook extends BaseHook {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Log.d("Xposed", "hook the method of android........");
                 String s = (String) param.args[1];
                 if (s.equals(Settings.Secure.ANDROID_ID)) {
-                    param.setResult(CommonUtils.getRandomNumByLine(2));
+                    param.setResult(getRandomBean().getRandom_android());
                 }
                 super.afterHookedMethod(param);
             }

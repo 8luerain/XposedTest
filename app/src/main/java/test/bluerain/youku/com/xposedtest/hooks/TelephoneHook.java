@@ -30,7 +30,7 @@ public class TelephoneHook extends BaseHook {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
                 XposedBridge.log("hook getDeviceId method , IMEI have been set");
-                param.setResult(CommonUtils.getRandomNumByLine(0));
+                param.setResult(getRandomBean().getRandom_imei());
 
                 super.afterHookedMethod(param);
             }
@@ -45,7 +45,7 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getSubscriberId method , IMSI have been set");
-                param.setResult(CommonUtils.getRandomNumByLine(1));
+                param.setResult(getRandomBean().getRandom_imsi());
                 super.afterHookedMethod(param);
             }
         }));
@@ -59,7 +59,7 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getSimSerialNumber method , SIM_Serial have been set");
-                param.setResult(CommonUtils.getRandomNumByLine(4));
+                param.setResult(getRandomBean().getRandom_sim_serial());
                 super.afterHookedMethod(param);
             }
         }));
@@ -72,7 +72,7 @@ public class TelephoneHook extends BaseHook {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 XposedBridge.log("hook getLine1Number method , PhoneNum have been set");
-                param.setResult(CommonUtils.getRandomNumByLine(5));
+                param.setResult(getRandomBean().getRandom_phone_num());
                 super.afterHookedMethod(param);
             }
         }));

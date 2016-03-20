@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
+import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 import test.bluerain.youku.com.xposedtest.utils.Profile;
 
@@ -58,6 +59,8 @@ public class Main2Activity extends AppCompatActivity {
     public static final int SAVE_FILE_FLAG = 0;
     public static final int RESTORE_FILE_FLAG = 1;
 
+    private RandomBean mRandombean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,23 +87,21 @@ public class Main2Activity extends AppCompatActivity {
         mButtonGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRandombean = new RandomBean();
+                CommonUtils.saveRandomBean(Profile.sRandomFilePath, mRandombean);
                 getUberCacheFile();
                 initEditView();
-                saveRandomValue2File();
                 Toast.makeText(Main2Activity.this, "随机成功", Toast.LENGTH_SHORT).show();
-//                clearFile();
             }
         });
         mButtonClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearFile();
-                Toast.makeText(Main2Activity.this, "清理完成", Toast.LENGTH_SHORT).show();
-//                clearAppData();
-//                CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME, new ClearUserDataObserver());
                 CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
                 CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
                 CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
+                Toast.makeText(Main2Activity.this, "清理完成", Toast.LENGTH_SHORT).show();
             }
         });
         mButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +149,7 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void initData() {
+
         mHandler = new Handler();
         mStringList = new ArrayList<>();
         mFileInfoAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mStringList);
@@ -219,12 +221,12 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void restoreRandomSurface() {
-        mEditText_imei.setText(CommonUtils.getRandomNumByLine(0));
-        mEditText_imsi.setText(CommonUtils.getRandomNumByLine(1));
-        mEditText_android.setText(CommonUtils.getRandomNumByLine(2));
-        mEditText_serial.setText(CommonUtils.getRandomNumByLine(3));
-        mEditText_sim_id.setText(CommonUtils.getRandomNumByLine(4));
-        mEditText_phone_num.setText(CommonUtils.getRandomNumByLine(5));
+        mEditText_imei.setText(mRandombean.getRandom_imei());
+        mEditText_imsi.setText(mRandombean.getRandom_imsi());
+        mEditText_android.setText(mRandombean.getRandom_android());
+        mEditText_serial.setText(mRandombean.getRandom_serial());
+        mEditText_sim_id.setText(mRandombean.getRandom_sim_serial());
+        mEditText_phone_num.setText(mRandombean.getRandom_phone_num());
     }
 
     private synchronized void clearFile() {
@@ -327,18 +329,16 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void initEditView() {
-        RandomBean bean = new RandomBean();
-        mEditText_imei.setText(bean.getRandom_imei());
-        Log.d("TAG", "random imei is  : " + bean.getRandom_imei());
-        mEditText_imsi.setText(bean.getRandom_imsi());
-        mEditText_serial.setText(bean.getRandom_serial());
-        mEditText_android.setText(bean.getRandom_android());
-        mEditText_sim_id.setText(bean.getRandom_sim_serial());
-        mEditText_phone_num.setText(bean.getRandom_phone_num());
+        mEditText_imei.setText(mRandombean.getRandom_imei());
+        mEditText_imsi.setText(mRandombean.getRandom_imsi());
+        mEditText_serial.setText(mRandombean.getRandom_serial());
+        mEditText_android.setText(mRandombean.getRandom_android());
+        mEditText_sim_id.setText(mRandombean.getRandom_sim_serial());
+        mEditText_phone_num.setText(mRandombean.getRandom_phone_num());
     }
 
     private void saveRandomValue2File() {
-        File file = new File(sRandomFilePath);
+        File file = new File(Profile.sRandomFilePath);
         FileWriter writer = null;
         try {
             if (file.exists())

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.data.HookInfo;
+import test.bluerain.youku.com.xposedtest.data.RandomBean;
 
 /**
  * Project: XposedTest.
@@ -12,6 +13,8 @@ import test.bluerain.youku.com.xposedtest.data.HookInfo;
  * Contact:<a href="mailto:8luerain@gmail.com">Contact_me_now</a>
  */
 public abstract class BaseHook {
+
+    protected static RandomBean randomBean;
 
     private List<HookInfo> mHookInfos = new ArrayList<>();
 
@@ -43,4 +46,12 @@ public abstract class BaseHook {
     }
 
     protected abstract void setHookItem(List<HookInfo> hookInfoList);
+
+    public static void setRandomBean(RandomBean randomBean) {
+        BaseHook.randomBean = randomBean;
+    }
+
+    public static RandomBean getRandomBean() {
+        return randomBean;
+    }
 }
