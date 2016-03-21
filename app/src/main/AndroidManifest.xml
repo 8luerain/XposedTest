@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="test.bluerain.youku.com.xposedtest"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="test.bluerain.youku.com.xposedtest"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"/>
 
     <permission android:name="android.permission.CLEAR_APP_USER_DATA"/>
 
@@ -26,8 +28,8 @@
             android:value="54"/>
 
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
+            android:name=".MainActivity"
+            android:label="@string/mainActivityName"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -35,6 +37,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".serivces.MyAccessbilityService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config"
+                />
+        </service>
+
+        <provider
+            android:name=".provider.ReocrdProvider"
+            android:authorities="test.bluerain.youku.com.xposedtest"/>
     </application>
 
 </manifest>

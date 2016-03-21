@@ -1,6 +1,7 @@
 package test.bluerain.youku.com.xposedtest;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.IPackageDataObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
+import test.bluerain.youku.com.xposedtest.serivces.MyAccessbilityService;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 import test.bluerain.youku.com.xposedtest.utils.Profile;
 
@@ -68,6 +70,12 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         initData();
         initViews();
+        initService();
+    }
+
+    private void initService() {
+
+
     }
 
     private void initViews() {
@@ -94,6 +102,8 @@ public class Main2Activity extends AppCompatActivity {
                 CommonUtils.saveRandomBean(Profile.sRandomFilePath, mRandombean);
                 getUberCacheFile();
                 initEditView();
+                Intent intent = new Intent(Main2Activity.this, MyAccessbilityService.class);
+                startActivity(intent);
                 Toast.makeText(Main2Activity.this, "随机成功", Toast.LENGTH_SHORT).show();
             }
         });
