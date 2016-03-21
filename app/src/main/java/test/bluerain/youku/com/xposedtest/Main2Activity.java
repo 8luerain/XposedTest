@@ -265,15 +265,6 @@ public class Main2Activity extends AppCompatActivity {
     }
 
 
-    class ClearUserDataObserver extends IPackageDataObserver.Stub {
-        public void onRemoveCompleted(final String packageName, final boolean succeeded) {
-            Log.d(TAG, "clear result is -->" + succeeded);
-//            final Message msg = mHandler.obtainMessage(FileInfoHandler.CLEAE_DATA);
-//            msg.arg1 = succeeded ? 3 : 4;
-//            mHandler.sendMessage(msg);
-            Toast.makeText(MyApplication.getContext(), packageName + "data remove successed", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     class GetUberCacheThread extends Thread {
         BufferedReader mBufferedReader;

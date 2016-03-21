@@ -160,6 +160,11 @@ public class CommonUtils {
         File file = new File(filePath);
         ObjectOutputStream outputStream = null;
         if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return false;
         }
         try {

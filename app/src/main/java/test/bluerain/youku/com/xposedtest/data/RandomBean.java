@@ -1,6 +1,8 @@
 package test.bluerain.youku.com.xposedtest.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 
@@ -67,5 +69,28 @@ public class RandomBean implements Serializable {
 
     public String getRandom_os_version() {
         return random_os_version;
+    }
+
+    public class DataBean {
+        public String itemName;
+        public String itemValue;
+
+        public DataBean(String itemName, String itemValue) {
+            this.itemName = itemName;
+            this.itemValue = itemValue;
+        }
+    }
+
+    public List<DataBean> getDataList() {
+        List<DataBean> beans = new ArrayList<>();
+        beans.add(new DataBean("IMEI: ", this.getRandom_imei()));
+        beans.add(new DataBean("IMSI: ", this.getRandom_imsi()));
+        beans.add(new DataBean("Android ID: ", this.getRandom_android()));
+        beans.add(new DataBean("Serial: ", this.getRandom_serial()));
+        beans.add(new DataBean("SIM ID: ", this.getRandom_sim_serial()));
+        beans.add(new DataBean("Build serial: ", this.getRandom_build_serial()));
+        beans.add(new DataBean("Model: ", this.getRandom_build_model()));
+        beans.add(new DataBean("Phone: ", this.getRandom_phone_num()));
+        return beans;
     }
 }

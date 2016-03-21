@@ -11,6 +11,7 @@ import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.adapter.MainPagerFragmentAdapter;
 import test.bluerain.youku.com.xposedtest.fragment.FirstFragment;
+import test.bluerain.youku.com.xposedtest.fragment.SecondFragment;
 
 /**
  * Project: XposedTest.
@@ -36,6 +37,7 @@ public class MainActivity extends FragmentActivity {
     private void ininData() {
         mFragments = new ArrayList<>();
         mFragments.add(new FirstFragment());
+        mFragments.add(new SecondFragment());
     }
 
     private void initView() {
