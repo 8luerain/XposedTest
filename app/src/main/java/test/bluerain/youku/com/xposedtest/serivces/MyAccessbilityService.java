@@ -48,6 +48,8 @@ public class MyAccessbilityService extends AccessibilityService {
 
     private List<AccessibilityNodeInfo> mReturnEdv = new ArrayList<>();
 
+    public static List<String> mSecondPageData = new ArrayList<>();
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         int eventType = event.getEventType();
@@ -199,34 +201,23 @@ public class MyAccessbilityService extends AccessibilityService {
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
         Log.d(TAG_EVENT, rootInActiveWindow.getClassName().toString());
         if (null != rootInActiveWindow) {
-            int childCount = rootInActiveWindow.getChildCount();
-            Log.d(TAG_EVENT, "First Page opened" + "child count is " + childCount);
-
-            for (int i = 0; i < childCount; i++) {
-                AccessibilityNodeInfo child = rootInActiveWindow.getChild(i);
-                if (child.getText().toString().contains("登录")) {
-                    child.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    Log.d(TAG_EVENT, "haha zhaodao denglu le ");
-                }
-                Log.d(TAG_EVENT, "child " + i + " is " + child.getText());
-            }
-//            List<AccessibilityNodeInfo> login = rootInActiveWindow.findAccessibilityNodeInfosByText("登录");
-//            Log.d(TAG_EVENT, login.size() + "");
-//            AccessibilityNodeInfo firstLogin;
-//            if (null != login && (null != (firstLogin = login.get(0)))) {
-//                Log.d(TAG_EVENT, "First Login Button found and clicked");
-//                firstLogin.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-//            }
+            List<AccessibilityNodeInfo> accessibilityNodeInfosByText = rootInActiveWindow.findAccessibilityNodeInfosByText(watchStrings[0]);
+            accessibilityNodeInfosByText.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
     }
 
+
     private void uberLogIn() {
+        if (mSecondPageData.size() == 0)
+            return;
         AccessibilityNodeInfo rootInActiveWindow = getRootInActiveWindow();
         List<AccessibilityNodeInfo> loginBtn = rootInActiveWindow.findAccessibilityNodeInfosByText(watchStrings[0]);//登陆
         bianliChild(rootInActiveWindow);
-        for (int i = 0; i < mReturnEdv.size(); i++) {
-            setEditViewText(mReturnEdv.get(i), i + "");
-        }
+        String user = mSecondPageData.remove(0);
+        String passwd = mSecondPageData.remove(0);
+        Log.d("TAG", user + " & " + passwd);
+        setEditViewText(mReturnEdv.remove(0), user);
+        setEditViewText(mReturnEdv.remove(0), passwd);
         loginBtn.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
     }
 

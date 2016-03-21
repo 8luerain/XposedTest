@@ -23,6 +23,9 @@ import android.widget.Toast;
 import test.bluerain.youku.com.xposedtest.R;
 import test.bluerain.youku.com.xposedtest.data.RecordTable;
 import test.bluerain.youku.com.xposedtest.provider.ReocrdProvider;
+import test.bluerain.youku.com.xposedtest.serivces.MyAccessbilityService;
+import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
+import test.bluerain.youku.com.xposedtest.utils.Profile;
 
 /**
  * Project: XposedTest.
@@ -101,8 +104,11 @@ public class FirstFragment extends Fragment {
                     int indexPhone = query.getColumnIndex(RecordTable.COLNUM_PHONE);
                     String user = query.getString(indexUser);
                     String phone = query.getString(indexPhone);
+                    MyAccessbilityService.mSecondPageData.add(user);
+                    MyAccessbilityService.mSecondPageData.add(phone);
                     Toast.makeText(getContext(), user + " & " + phone, Toast.LENGTH_SHORT).show();
                 }
+                CommonUtils.launchApp(getContext(), Profile.UBER_PACKAGE_NAME);
             }
         });
     }
