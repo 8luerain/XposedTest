@@ -9,21 +9,33 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:textSize="20sp"
+            android:id="@+id/id_btn_secondfragment_set_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设定服务"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
             android:id="@+id/id_btn_secondfragment_refresh"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="一键新机"/>
+            android:text="一键新机"
+            android:textSize="20sp"/>
 
         <Button
-            android:textSize="20sp"
             android:id="@+id/id_btn_secondfragment_clean"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="清理数据"/>
+            android:text="清理数据"
+            android:textSize="20sp"/>
     </LinearLayout>
+
 
     <ListView
         android:id="@+id/id_lv_second_fragment"

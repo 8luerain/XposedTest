@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.R;
@@ -23,6 +24,8 @@ public class SecondFragmentListViewAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
 
     public SecondFragmentListViewAdapter(List<RandomBean.DataBean> dataBeans, Context mContext, int layoutId) {
+        if (null == dataBeans)
+            dataBeans = new ArrayList<>();
         this.mDataBeans = dataBeans;
         this.mContext = mContext;
         this.mLayoutId = layoutId;

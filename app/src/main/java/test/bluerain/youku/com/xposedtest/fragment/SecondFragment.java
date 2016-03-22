@@ -1,6 +1,8 @@
 package test.bluerain.youku.com.xposedtest.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,22 +28,35 @@ public class SecondFragment extends Fragment {
     private Button mButtonRefresh;
     private Button mButtonClean;
 
+    private Button mButtonSetService;
+
     private SecondFragmentListViewAdapter mAdapter;
+    private List<RandomBean.DataBean> mDataBeanList;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_secondpage, null);
+        initData();
         initView(view);
         return view;
     }
 
+    private void initData() {
+        RandomBean randomBean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+        if (null != randomBean)
+            mDataBeanList = randomBean.getDataList();
+    }
+
     private void initView(View view) {
+        mButtonSetService = (Button) view.findViewById(R.id.id_btn_secondfragment_set_service);
+        mButtonSetService.setOnClickListener(new SetServiceListener());
         mButtonRefresh = (Button) view.findViewById(R.id.id_btn_secondfragment_refresh);
         mButtonRefresh.setOnClickListener(new RefreshListener());
         mButtonClean = (Button) view.findViewById(R.id.id_btn_secondfragment_clean);
-        mAdapter = new SecondFragmentListViewAdapter(CommonUtils.getRandomBean(Profile.sRandomFilePath).getDataList(), getContext(), R.layout.item_listview_secondfragment);
+        mAdapter = new SecondFragmentListViewAdapter(mDataBeanList, getContext(), R.layout
+                .item_listview_secondfragment);
         mListView = (ListView) view.findViewById(R.id.id_lv_second_fragment);
         mListView.setAdapter(mAdapter);
 
@@ -56,6 +71,14 @@ public class SecondFragment extends Fragment {
             List<RandomBean.DataBean> dataList = bean.getDataList();
             mAdapter.setmDataBeans(dataList);
             mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    class SetServiceListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivity(intent);
         }
     }
 

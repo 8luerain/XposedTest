@@ -74,10 +74,6 @@ public class MyAccessbilityService extends AccessibilityService {
 
                 eventText = "TYPE_VIEW_FOCUSED";
 
-                AccessibilityNodeInfo source = event.getSource();
-
-                eventText += "& text is " + source;
-
                 break;
 
             case AccessibilityEvent.TYPE_VIEW_LONG_CLICKED:
@@ -102,7 +98,6 @@ public class MyAccessbilityService extends AccessibilityService {
 
                 eventText = "TYPE_WINDOW_STATE_CHANGED";
 
-                eventText += "----->" + event.getClassName().toString();
                 break;
 
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
