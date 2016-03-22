@@ -28,6 +28,7 @@
             android:textSize="20sp"/>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/id_btn_secondfragment_clean"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

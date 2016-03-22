@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="手机号"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -55,6 +55,7 @@ public class SecondFragment extends Fragment {
         mButtonRefresh = (Button) view.findViewById(R.id.id_btn_secondfragment_refresh);
         mButtonRefresh.setOnClickListener(new RefreshListener());
         mButtonClean = (Button) view.findViewById(R.id.id_btn_secondfragment_clean);
+        mButtonClean.setOnClickListener(new CleanDataListener());
         mAdapter = new SecondFragmentListViewAdapter(mDataBeanList, getContext(), R.layout
                 .item_listview_secondfragment);
         mListView = (ListView) view.findViewById(R.id.id_lv_second_fragment);
@@ -71,6 +72,7 @@ public class SecondFragment extends Fragment {
             List<RandomBean.DataBean> dataList = bean.getDataList();
             mAdapter.setmDataBeans(dataList);
             mAdapter.notifyDataSetChanged();
+            cleanDataAndLaunch();
         }
     }
 
@@ -80,6 +82,18 @@ public class SecondFragment extends Fragment {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
         }
+    }
+    class CleanDataListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+    private void cleanDataAndLaunch() {
+        CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
+        CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
+        CommonUtils.launchApp(getActivity(), Profile.UBER_PACKAGE_NAME);
     }
 
 }
