@@ -107,6 +107,16 @@ public class CommonUtils {
         return null;
     }
 
+
+
+    /*
+    public static void copyFile(String sourceFile, String desFile){
+
+        do_exec("cp -f "+sourceFile+" "+desFile);
+    }
+
+    */
+
     public static void copyFile(String sourceFile, String desFile) throws Exception {
         Log.d("TAG", desFile);
         if (TextUtils.isEmpty(sourceFile) || TextUtils.isEmpty(desFile))
@@ -120,8 +130,8 @@ public class CommonUtils {
             throw new Exception("Source file do not exist");
         }
 
-        if (!des.exists())
-            des.createNewFile();
+        if (des.exists())
+            des.delete();
 
         reader = new FileReader(sourceFile);
         writer = new FileWriter(des);
@@ -133,6 +143,8 @@ public class CommonUtils {
         reader.close();
         writer.close();
     }
+
+
 
     public static RandomBean getRandomBean(String filePath) {
         RandomBean bean = null;
@@ -159,14 +171,10 @@ public class CommonUtils {
     public static boolean saveRandomBean(String filePath, RandomBean bean) {
         File file = new File(filePath);
         ObjectOutputStream outputStream = null;
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return false;
+        if (file.exists()) {
+            file.delete();
         }
+
         try {
             outputStream = new ObjectOutputStream(new FileOutputStream(file));
             outputStream.writeObject(bean);
@@ -185,6 +193,7 @@ public class CommonUtils {
      *
      * @param context
      */
+
     public static void launchApp(Context context, String packageName) {
         // 判断是否安装过App，否则去市场下载
         if (isAppInstalled(context, packageName)) {

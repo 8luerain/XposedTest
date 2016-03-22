@@ -46,4 +46,8 @@ public class MainActivity extends FragmentActivity {
         mFragmentPagerAdapter.setFragments(mFragments);
         mViewPager.setAdapter(mFragmentPagerAdapter);
     }
+
+    public List<Fragment> getListFragment() {
+        return mFragments;
+    }
 }

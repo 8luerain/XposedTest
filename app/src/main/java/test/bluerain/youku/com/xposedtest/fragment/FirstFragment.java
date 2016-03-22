@@ -1,6 +1,5 @@
 package test.bluerain.youku.com.xposedtest.fragment;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +19,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
+import test.bluerain.youku.com.xposedtest.MainActivity;
 import test.bluerain.youku.com.xposedtest.R;
+import test.bluerain.youku.com.xposedtest.data.RandomBean;
 import test.bluerain.youku.com.xposedtest.data.RecordTable;
 import test.bluerain.youku.com.xposedtest.provider.ReocrdProvider;
 import test.bluerain.youku.com.xposedtest.serivces.MyAccessbilityService;
@@ -43,6 +46,8 @@ public class FirstFragment extends Fragment {
 
     private Button mButtonLoadDefault;
 
+    public static final int SAVE_FILE_FLAG = 0;
+    public static final int RESTORE_FILE_FLAG = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,10 +73,6 @@ public class FirstFragment extends Fragment {
         mButtonSetData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContentValues values = new ContentValues();
-                values.put(RecordTable.COLNUM_USER, "111@relegoule.sends.cn");
-                values.put(RecordTable.COLNUM_PHONE, "123455678");
-                getActivity().getContentResolver().insert(ReocrdProvider.RECORED_URI, values);
             }
         });
 
@@ -90,28 +91,52 @@ public class FirstFragment extends Fragment {
                 -1
         );
         mListView.setAdapter(mCursorAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Uri uri = Uri.withAppendedPath(ReocrdProvider.RECORED_URI, position + "");
-                Log.d("TAG", uri.toString());
-                Cursor query = getActivity().getContentResolver().query(uri, null,
-                        RecordTable._ID + " = ?", null, null);
-                if (null == query)
-                    return;
-                if (query.moveToFirst()) {
-                    int indexUser = query.getColumnIndex(RecordTable.COLNUM_USER);
-                    int indexPhone = query.getColumnIndex(RecordTable.COLNUM_PHONE);
-                    String user = query.getString(indexUser);
-                    String phone = query.getString(indexPhone);
-                    MyAccessbilityService.mSecondPageData.add(user);
-                    MyAccessbilityService.mSecondPageData.add(phone);
-                    Toast.makeText(getContext(), user + " & " + phone, Toast.LENGTH_SHORT).show();
-                }
-                CommonUtils.launchApp(getContext(), Profile.UBER_PACKAGE_NAME);
-            }
-        });
+        mListView.setOnItemClickListener(new ListViewItemClickListener());
     }
+
+    private void setSecondFragmentListView() {
+        RandomBean currentRandomBean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        List<Fragment> listFragment = mainActivity.getListFragment();
+        if (null != listFragment) {
+            SecondFragment secondFragment = (SecondFragment) listFragment.get(1);
+            secondFragment.refreshListView(currentRandomBean);
+        }
+    }
+
+
+    class ListViewItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Uri uri = Uri.withAppendedPath(ReocrdProvider.RECORED_URI, position+1 + "");
+            Log.d("TAG", uri.toString());
+            Cursor query = getActivity().getContentResolver().query(uri, null,
+                    RecordTable._ID + " = ?", null, null);
+            if (null == query)
+                return;
+            if (query.moveToFirst()) {
+                int indexUser = query.getColumnIndex(RecordTable.COLNUM_USER);
+                int indexPhone = query.getColumnIndex(RecordTable.COLNUM_PHONE);
+                String user = query.getString(indexUser);
+                String phone = query.getString(indexPhone);
+                MyAccessbilityService.mSecondPageData.add(user);
+                MyAccessbilityService.mSecondPageData.add(phone);
+                String fileName = user.split("@")[0];
+                try {
+                    String fullFilePath = Profile.sRandomSaveDirPath + fileName;
+                    CommonUtils.copyFile(fullFilePath, Profile.sRandomFilePath);
+                    setSecondFragmentListView();
+                    Toast.makeText(getContext(), "还原文件成功", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.d("TAG", "还原文件失败" + e.toString());
+                    Toast.makeText(getContext(), "还原文件失败...", Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(getContext(), user + " & " + phone, Toast.LENGTH_SHORT).show();
+            }
+            CommonUtils.launchApp(getContext(), Profile.UBER_PACKAGE_NAME);
+        }
+    }
+
 
     class CursorHanlder implements LoaderManager.LoaderCallbacks<Cursor> {
         @Override
