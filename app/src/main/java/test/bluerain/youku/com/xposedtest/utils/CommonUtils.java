@@ -1,5 +1,7 @@
 package test.bluerain.youku.com.xposedtest.utils;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -12,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -275,5 +276,66 @@ public class CommonUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void changeAirplaneOn() {
+        /*
+        settings put global airplane_mode_on 1
+        am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true
+         */
+        do_exec_with_root("settings put global airplane_mode_on 1");
+        do_exec_with_root("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true");
+    }
+
+    public static void changeAirplaneOff() {
+        /*
+        settings put global airplane_mode_on 0
+        am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false
+         */
+        do_exec_with_root("settings put global airplane_mode_on 0");
+        do_exec_with_root("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false");
+    }
+
+
+    public static ProgressDialog createProgressDialog(Context activityContext) {
+        ProgressDialog mypDialog = new ProgressDialog(activityContext);
+        //实例化
+        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        //设置进度条风格，风格为圆形，旋转的
+        mypDialog.setTitle("稍后");
+        //设置ProgressDialog 标题
+        mypDialog.setMessage("进行中......");
+        mypDialog.setIcon(android.R.drawable.ic_menu_compass);
+        mypDialog.setIndeterminate(false);
+        //设置ProgressDialog 的进度条是否不明确
+        mypDialog.setCancelable(true);
+        //设置ProgressDialog 是否可以按退回按键取消
+        return mypDialog;
+    }
+
+    public static void uberEverythingNew(final Activity activityContext) {
+        final ProgressDialog progressDialog = CommonUtils.createProgressDialog(activityContext);
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CommonUtils.changeAirplaneOn();
+                CommonUtils.changeAirplaneOff();
+                CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
+                CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                CommonUtils.launchApp(activityContext, Profile.UBER_PACKAGE_NAME);
+                activityContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        }).start();
     }
 }

@@ -105,6 +105,7 @@ public class FirstFragment extends Fragment {
     }
 
 
+
     class ListViewItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -133,7 +134,7 @@ public class FirstFragment extends Fragment {
                 }
                 Toast.makeText(getContext(), user + " & " + phone, Toast.LENGTH_SHORT).show();
             }
-            CommonUtils.launchApp(getContext(), Profile.UBER_PACKAGE_NAME);
+            CommonUtils.uberEverythingNew(getActivity());
         }
     }
 

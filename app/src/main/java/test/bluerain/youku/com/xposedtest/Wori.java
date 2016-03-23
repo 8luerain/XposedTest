@@ -1,6 +1,6 @@
 package test.bluerain.youku.com.xposedtest;
 
-import android.os.Build;
+import android.os.*;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -42,7 +42,8 @@ public class Wori implements IXposedHookLoadPackage {
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
-        XposedBridge.log("loading -------> " + loadPackageParam.packageName);
+//        XposedBridge.log("loading -------> " + loadPackageParam.packageName +" & pid is " + android.os.Process.myPid());
+        Log.d("process ","loading -------> " + loadPackageParam.packageName +" & pid is " + android.os.Process.myPid());
 
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图

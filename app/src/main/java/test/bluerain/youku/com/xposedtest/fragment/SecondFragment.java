@@ -81,7 +81,7 @@ public class SecondFragment extends Fragment {
             RandomBean bean = new RandomBean();
             CommonUtils.saveRandomBean(Profile.sRandomFilePath, bean);
             refreshListView(bean);
-            cleanDataAndLaunch();
+            CommonUtils.uberEverythingNew(getActivity());
         }
     }
 
@@ -107,12 +107,6 @@ public class SecondFragment extends Fragment {
         public void onClick(View v) {
 
         }
-    }
-
-    private void cleanDataAndLaunch() {
-        CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
-        CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
-        CommonUtils.launchApp(getActivity(), Profile.UBER_PACKAGE_NAME);
     }
 
     private void showFileDialog() {

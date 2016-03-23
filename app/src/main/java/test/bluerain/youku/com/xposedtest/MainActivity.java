@@ -1,10 +1,11 @@
 package test.bluerain.youku.com.xposedtest;
 
 
-import android.os.Bundle;
+import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("process", "UI process id is:  " + android.os.Process.myPid());
         ininData();
         initView();
     }
