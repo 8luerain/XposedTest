@@ -2,7 +2,6 @@ package test.bluerain.youku.com.xposedtest.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -108,15 +107,16 @@ public class CommonUtils {
     }
 
 
+    public static void copyFile(String sourceFile, String desFile) {
 
-    /*
-    public static void copyFile(String sourceFile, String desFile){
-
-        do_exec("cp -f "+sourceFile+" "+desFile);
+        Log.d("TAG", "copyFile source file path : " + sourceFile);
+        Log.d("TAG", "copyFile des file path : " + desFile);
+        Log.d("TAG", "copyFile result is : " + do_exec("cp -f " + sourceFile + " " + desFile));
     }
 
-    */
 
+
+    /*
     public static void copyFile(String sourceFile, String desFile) throws Exception {
         Log.d("TAG", desFile);
         if (TextUtils.isEmpty(sourceFile) || TextUtils.isEmpty(desFile))
@@ -144,6 +144,7 @@ public class CommonUtils {
         writer.close();
     }
 
+*/
 
 
     public static RandomBean getRandomBean(String filePath) {

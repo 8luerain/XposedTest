@@ -10,7 +10,7 @@ public class Profile {
 
     public static final String UBER_PACKAGE_NAME = "com.ubercab";
 
-    public static final String sRandomFilePath = "/storage/emulated/0/uber_random/";
+    public static final String sRandomFilePath = "/storage/emulated/0/uber_random";
 
     public static final String sRandomSaveDirPath = "/storage/emulated/0/uber_save/";
 }

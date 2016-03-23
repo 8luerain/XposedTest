@@ -108,7 +108,7 @@ public class FirstFragment extends Fragment {
     class ListViewItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Uri uri = Uri.withAppendedPath(ReocrdProvider.RECORED_URI, position+1 + "");
+            Uri uri = Uri.withAppendedPath(ReocrdProvider.RECORED_URI, position + 1 + "");
             Log.d("TAG", uri.toString());
             Cursor query = getActivity().getContentResolver().query(uri, null,
                     RecordTable._ID + " = ?", null, null);

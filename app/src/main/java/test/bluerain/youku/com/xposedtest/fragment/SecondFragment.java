@@ -133,7 +133,7 @@ public class SecondFragment extends Fragment {
                     return;
                 }
                 try {
-                    CommonUtils.copyFile(Profile.sRandomFilePath, Profile.sRandomSaveDirPath + "/" + text);
+                    CommonUtils.copyFile(Profile.sRandomFilePath, Profile.sRandomSaveDirPath + text);
                     insertData(text);
                     Toast.makeText(getActivity(), "保存成功~~", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
