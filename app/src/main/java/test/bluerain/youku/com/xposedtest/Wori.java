@@ -52,7 +52,7 @@ public class Wori implements IXposedHookLoadPackage {
         if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
             return;
         }
-        bean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+        bean = (RandomBean) CommonUtils.getBeanFromFile(Profile.sRandomFile);
         BaseHook.setRandomBean(bean);
         XposedBridge.hookAllConstructors(File.class, new FileHandler());
         XposedHelpers.setStaticObjectField(Build.class, "SERIAL", bean.getRandom_serial());

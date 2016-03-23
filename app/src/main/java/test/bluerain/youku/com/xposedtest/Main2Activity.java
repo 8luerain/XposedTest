@@ -2,7 +2,6 @@ package test.bluerain.youku.com.xposedtest;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.IPackageDataObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -99,7 +98,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mRandombean = new RandomBean();
-                CommonUtils.saveRandomBean(Profile.sRandomFilePath, mRandombean);
+                CommonUtils.saveBeanToFile(Profile.sRandomFile, mRandombean);
                 getUberCacheFile();
                 initEditView();
                 Intent intent = new Intent(Main2Activity.this, MyAccessbilityService.class);
@@ -151,7 +150,7 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     CommonUtils.copyFile(sRandomSaveDirPath + "/" + "default", sRandomFilePath);
-                    mRandombean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+                    mRandombean =(RandomBean) CommonUtils.getBeanFromFile(Profile.sRandomFile);
                     initEditView();
                     Toast.makeText(Main2Activity.this, "恢复默认成功~~", Toast.LENGTH_SHORT).show();
 //                    CommonUtils.launchApp(Main2Activity.this, Profile.UBER_PACKAGE_NAME);
@@ -345,7 +344,7 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void saveRandomValue2File() {
-        File file = new File(Profile.sRandomFilePath);
+        File file = new File(Profile.sRandomFile);
         FileWriter writer = null;
         try {
             if (file.exists())

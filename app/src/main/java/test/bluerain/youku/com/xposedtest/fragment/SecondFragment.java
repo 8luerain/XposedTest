@@ -53,7 +53,7 @@ public class SecondFragment extends Fragment {
     }
 
     private void initData() {
-        RandomBean randomBean = CommonUtils.getRandomBean(Profile.sRandomFilePath);
+        RandomBean randomBean = (RandomBean) CommonUtils.getBeanFromFile(Profile.sRandomFile);
         if (null != randomBean)
             mDataBeanList = randomBean.getDataList();
     }
@@ -79,9 +79,9 @@ public class SecondFragment extends Fragment {
         @Override
         public void onClick(View v) {
             RandomBean bean = new RandomBean();
-            CommonUtils.saveRandomBean(Profile.sRandomFilePath, bean);
+            CommonUtils.saveBeanToFile(Profile.sRandomFile, bean);
             refreshListView(bean);
-            CommonUtils.uberEverythingNew(getActivity());
+            CommonUtils.uberEverythingNew(getActivity(), "重置Uber");
         }
     }
 
@@ -127,7 +127,7 @@ public class SecondFragment extends Fragment {
                     return;
                 }
                 try {
-                    CommonUtils.copyFile(Profile.sRandomFilePath, Profile.sRandomSaveDirPath + text);
+                    CommonUtils.copyFile(Profile.sRandomFile, Profile.sRandomSaveDirPath + text);
                     insertData(text);
                     Toast.makeText(getActivity(), "保存成功~~", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -147,8 +147,8 @@ public class SecondFragment extends Fragment {
 
     private void insertData(String data) {
         ContentValues values = new ContentValues();
-        values.put(RecordTable.COLNUM_USER, data + "@relegoule.sends.cn");
-        values.put(RecordTable.COLNUM_PHONE, "meiyoumima123");
+        values.put(RecordTable.COLNUM_USER, data + Profile.defaultDomain);
+        values.put(RecordTable.COLNUM_PHONE, Profile.defaultPassword);
         getActivity().getContentResolver().insert(ReocrdProvider.RECORED_URI, values);
     }
 

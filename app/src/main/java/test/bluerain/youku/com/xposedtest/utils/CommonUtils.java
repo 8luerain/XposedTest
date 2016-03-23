@@ -20,8 +20,6 @@ import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import test.bluerain.youku.com.xposedtest.data.RandomBean;
-
 /**
  * Project: remoteXposedTest.
  * Data: 2016/1/28.
@@ -148,8 +146,8 @@ public class CommonUtils {
 */
 
 
-    public static RandomBean getRandomBean(String filePath) {
-        RandomBean bean = null;
+    public static Object getBeanFromFile(String filePath) {
+        Object bean = null;
         File file = new File(filePath);
         ObjectInputStream inputStream = null;
         if (!file.exists()) {
@@ -157,7 +155,7 @@ public class CommonUtils {
         }
         try {
             inputStream = new ObjectInputStream(new FileInputStream(file));
-            bean = (RandomBean) inputStream.readObject();
+            bean = inputStream.readObject();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -170,7 +168,7 @@ public class CommonUtils {
         return bean;
     }
 
-    public static boolean saveRandomBean(String filePath, RandomBean bean) {
+    public static boolean saveBeanToFile(String filePath, Object bean) {
         File file = new File(filePath);
         ObjectOutputStream outputStream = null;
         if (file.exists()) {
@@ -297,14 +295,14 @@ public class CommonUtils {
     }
 
 
-    public static ProgressDialog createProgressDialog(Context activityContext) {
+    public static ProgressDialog createProgressDialog(Context activityContext, String msg) {
         ProgressDialog mypDialog = new ProgressDialog(activityContext);
         //实例化
         mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         //设置进度条风格，风格为圆形，旋转的
         mypDialog.setTitle("稍后");
         //设置ProgressDialog 标题
-        mypDialog.setMessage("进行中......");
+        mypDialog.setMessage(msg + "进行中......");
         mypDialog.setIcon(android.R.drawable.ic_menu_compass);
         mypDialog.setIndeterminate(false);
         //设置ProgressDialog 的进度条是否不明确
@@ -313,8 +311,8 @@ public class CommonUtils {
         return mypDialog;
     }
 
-    public static void uberEverythingNew(final Activity activityContext) {
-        final ProgressDialog progressDialog = CommonUtils.createProgressDialog(activityContext);
+    public static void uberEverythingNew(final Activity activityContext, String msg) {
+        final ProgressDialog progressDialog = CommonUtils.createProgressDialog(activityContext, msg);
         progressDialog.show();
         new Thread(new Runnable() {
             @Override

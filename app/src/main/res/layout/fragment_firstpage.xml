@@ -5,22 +5,23 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:visibility="gone"
             android:id="@+id/id_btn_firstfragment_set_data"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="设定数据"/>
+            android:text="设定默认"/>
 
         <Button
             android:id="@+id/id_btn_firstfragment_get_default"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:layout_weight="4"
             android:text="载入默认"/>
     </LinearLayout>
 
