@@ -339,6 +339,6 @@ public class CommonUtils {
     }
 
     public static void clearSDFiles() {
-        do_exec_with_root("rm -r " + Profile.sSDFiles);
+        do_exec_with_root("rm -Rf " + Profile.sSDFiles);
     }
 }

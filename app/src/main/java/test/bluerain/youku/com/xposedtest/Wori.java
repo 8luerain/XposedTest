@@ -54,7 +54,7 @@ public class Wori implements IXposedHookLoadPackage {
         }
         bean = (RandomBean) CommonUtils.getBeanFromFile(Profile.sRandomFile);
         BaseHook.setRandomBean(bean);
-        XposedBridge.hookAllConstructors(File.class, new FileHandler());
+//        XposedBridge.hookAllConstructors(File.class, new FileHandler());
         XposedHelpers.setStaticObjectField(Build.class, "SERIAL", bean.getRandom_serial());
         XposedHelpers.setStaticObjectField(Build.class, "MODEL", bean.getRandom_build_model());
         XposedHelpers.setStaticObjectField(Build.VERSION.class, "RELEASE", bean.getRandom_os_version());
