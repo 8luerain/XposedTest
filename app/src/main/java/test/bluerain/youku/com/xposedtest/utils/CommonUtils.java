@@ -321,6 +321,7 @@ public class CommonUtils {
                 CommonUtils.changeAirplaneOff();
                 CommonUtils.forceStopApp(Profile.UBER_PACKAGE_NAME);
                 CommonUtils.clearAppData(Profile.UBER_PACKAGE_NAME);
+                CommonUtils.clearSDFiles();
                 try {
                     Thread.sleep(6000);
                 } catch (InterruptedException e) {
@@ -335,5 +336,9 @@ public class CommonUtils {
                 });
             }
         }).start();
+    }
+
+    public static void clearSDFiles() {
+        do_exec_with_root("rm -r " + Profile.sSDFiles);
     }
 }

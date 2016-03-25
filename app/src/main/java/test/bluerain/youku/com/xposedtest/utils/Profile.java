@@ -12,6 +12,8 @@ public class Profile {
 
     public static final String sRandomFile = "/storage/emulated/0/uber_random";
 
+    public static final String sSDFiles = "/storage/emulated/0/Android/data";
+
 
     public static final String sRandomSaveDirPath = "/storage/emulated/0/uber_save/";
 
