@@ -1,6 +1,6 @@
 package test.bluerain.youku.com.xposedtest;
 
-import android.os.*;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -15,9 +15,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
 import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
-import test.bluerain.youku.com.xposedtest.hooks.InputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
-import test.bluerain.youku.com.xposedtest.hooks.OutputStreamHook;
 import test.bluerain.youku.com.xposedtest.hooks.RuntimeHook;
 import test.bluerain.youku.com.xposedtest.hooks.SettingHook;
 import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
@@ -43,13 +41,14 @@ public class Wori implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 //        XposedBridge.log("loading -------> " + loadPackageParam.packageName +" & pid is " + android.os.Process.myPid());
-        Log.d("process ","loading -------> " + loadPackageParam.packageName +" & pid is " + android.os.Process.myPid());
+        Log.d("process ", "loading -------> " + loadPackageParam.packageName + " & pid is " + android.os.Process.myPid());
 
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
 //        if (!TextUtils.equals(loadPackageParam.packageName, "xiaomeng.bupt.com.demo"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.sankuai.meituan"))
-        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
+        if (!TextUtils.equals(loadPackageParam.packageName, "com.sdu.didi.psnger")) {
+//        if (!TextUtils.equals(loadPackageParam.packageName, "com.ubercab")) {
             return;
         }
         bean = (RandomBean) CommonUtils.getBeanFromFile(Profile.sRandomFile);
@@ -66,8 +65,8 @@ public class Wori implements IXposedHookLoadPackage {
 //        HookManger.addHooks(new SDCardStatuHook());
 
 //        HookManger.addHooks(new FileOutputStreamHook());
-        HookManger.addHooks(new OutputStreamHook());
-        HookManger.addHooks(new InputStreamHook());
+//        HookManger.addHooks(new OutputStreamHook());
+//        HookManger.addHooks(new InputStreamHook());
         HookManger.startHook(loadPackageParam.classLoader);
 
     }

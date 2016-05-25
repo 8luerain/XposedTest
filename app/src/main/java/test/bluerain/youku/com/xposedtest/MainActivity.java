@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import test.bluerain.youku.com.xposedtest.adapter.MainPagerFragmentAdapter;
+import test.bluerain.youku.com.xposedtest.fragment.DidiFragment;
 import test.bluerain.youku.com.xposedtest.fragment.FirstFragment;
 import test.bluerain.youku.com.xposedtest.fragment.SecondFragment;
 
@@ -40,10 +41,12 @@ public class MainActivity extends FragmentActivity {
         mFragments = new ArrayList<>();
         mFragments.add(new FirstFragment());
         mFragments.add(new SecondFragment());
+        mFragments.add(new DidiFragment());
     }
 
     private void initView() {
         mViewPager = (ViewPager) findViewById(R.id.id_vp_main);
+        mViewPager.setOffscreenPageLimit(3);
         mFragmentPagerAdapter = new MainPagerFragmentAdapter(getSupportFragmentManager());
         mFragmentPagerAdapter.setFragments(mFragments);
         mViewPager.setAdapter(mFragmentPagerAdapter);

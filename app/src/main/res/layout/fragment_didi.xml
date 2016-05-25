@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/id_txv_didi_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="奔跑吧！滴滴！"
+        android:textSize="20dp"/>
+
+    <View
+        android:id="@+id/id_view_split_one"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/id_txv_didi_title"
+        android:layout_marginTop="10dp"
+        android:background="#000000"/>
+
+    <TextView
+        android:layout_marginTop="46dp"
+        android:textSize="20dp"
+        android:text="获取号码："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/id_view_split_one"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textView_phone_num"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignLeft="@+id/id_txv_didi_title"/>
+
+    <TextView
+        android:textSize="20dp"
+        android:text="清理数据："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id_txv_didi_qinglishuju"
+        android:layout_marginTop="87dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textView_clean_data"
+        android:layout_alignTop="@+id/id_txv_didi_qinglishuju"
+        android:layout_alignLeft="@+id/textView_phone_num"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_didi_get_phone"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toRightOf="@+id/id_txv_didi_title"
+        android:indeterminate="false"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_didi_clean_data"
+        android:layout_alignTop="@+id/textView_clean_data"
+        android:layout_alignLeft="@+id/progressBar_didi_get_phone"
+        android:indeterminate="false"/>
+
+    <TextView
+        android:layout_marginTop="72dp"
+        android:textSize="20dp"
+        android:text="开始登陆："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_didi_lable_login"
+        android:layout_below="@+id/progressBar_didi_clean_data"
+        android:layout_alignParentLeft="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textView_didi_login"
+        android:layout_alignBottom="@+id/textView_didi_lable_login"
+        android:layout_alignLeft="@+id/textView_clean_data"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_didi_login"
+        android:indeterminate="false"
+        android:layout_alignTop="@+id/textView_didi_lable_login"
+        android:layout_alignLeft="@+id/progressBar_didi_clean_data"/>
+
+
+</RelativeLayout>
