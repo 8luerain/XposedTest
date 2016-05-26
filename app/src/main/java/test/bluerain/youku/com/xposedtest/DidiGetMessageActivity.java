@@ -23,10 +23,6 @@ public class DidiGetMessageActivity extends Activity {
 
     private String mMessageBody;
 
-    static {
-        MessageContainer.sCurrentPhoneNum = "11111111111";
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
