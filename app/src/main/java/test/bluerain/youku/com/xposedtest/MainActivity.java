@@ -33,15 +33,15 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("process", "UI process id is:  " + android.os.Process.myPid());
-        ininData();
+        initData();
         initView();
     }
 
-    private void ininData() {
+    private void initData() {
         mFragments = new ArrayList<>();
+        mFragments.add(new DidiFragment());
         mFragments.add(new FirstFragment());
         mFragments.add(new SecondFragment());
-        mFragments.add(new DidiFragment());
     }
 
     private void initView() {

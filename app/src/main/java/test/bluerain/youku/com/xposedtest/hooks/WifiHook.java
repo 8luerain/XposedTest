@@ -46,8 +46,9 @@ public class WifiHook extends BaseHook {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log("hook the mac地址 ");
-                param.setResult("a1:11:11:11:11:11");
+                String result = randomBean.getRandom_mac_address();
+                XposedBridge.log("hook the mac地址 ,已经设置为[" + result + "]");
+                param.setResult(result);
                 super.afterHookedMethod(param);
             }
         }));

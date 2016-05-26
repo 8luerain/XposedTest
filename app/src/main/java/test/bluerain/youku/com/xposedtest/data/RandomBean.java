@@ -22,6 +22,7 @@ public class RandomBean implements Serializable {
     private String random_build_model;
     private String random_build_serial;
     private String random_os_version;
+    private String random_mac_address;
 
     public RandomBean() {
         random_imei = "35" + CommonUtils.getRandomNumString(13);
@@ -33,6 +34,7 @@ public class RandomBean implements Serializable {
         random_build_model = CommonUtils.getRandomMixUpcaseString(5);
         random_build_serial = CommonUtils.getRandomMixString(10);
         random_os_version = "5.0." + CommonUtils.getRandomNumString(1);
+        random_mac_address = CommonUtils.getRandomMacAddress();
     }
 
     public String getRandom_imei() {
@@ -71,6 +73,10 @@ public class RandomBean implements Serializable {
         return random_os_version;
     }
 
+    public String getRandom_mac_address() {
+        return random_mac_address;
+    }
+
     public class DataBean {
         public String itemName;
         public String itemValue;
@@ -91,6 +97,7 @@ public class RandomBean implements Serializable {
         beans.add(new DataBean("Build serial: ", this.getRandom_build_serial()));
         beans.add(new DataBean("Model: ", this.getRandom_build_model()));
         beans.add(new DataBean("Phone: ", this.getRandom_phone_num()));
+        beans.add(new DataBean("MAC: ", this.getRandom_mac_address()));
         return beans;
     }
 }

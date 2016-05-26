@@ -42,6 +42,15 @@ public class CommonUtils {
     private static final String CMD_FORCE_STOP_APP = "am force-stop ";
 
 
+    public static String getRandomMacAddress() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            builder.append(getRandomMixString(2));
+            builder.append(i == 5 ? "" : ":");
+        }
+        return builder.toString();
+    }
+
     public static String getRandomNumString(int length) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < length; i++) {

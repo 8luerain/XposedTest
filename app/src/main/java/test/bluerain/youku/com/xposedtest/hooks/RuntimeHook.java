@@ -57,7 +57,7 @@ public class RuntimeHook extends BaseHook {
 
                         @Override
                         public InputStream getInputStream() {
-                            String s = "a1:11:11:11:11:11";
+                            String s = randomBean.getRandom_mac_address();
                             return new ByteArrayInputStream(s.getBytes());
                         }
 
