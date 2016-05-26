@@ -28,7 +28,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/mainActivityName"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -37,6 +37,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".DidiGetMessageActivity">
+            <intent-filter>
+                <action android:name="test.bluerain.youku.com.xposedtest.getmessage"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <service
             android:name=".serivces.MyAccessbilityService"
             android:label="@string/app_name"

@@ -15,6 +15,7 @@ import test.bluerain.youku.com.xposedtest.R;
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
 import test.bluerain.youku.com.xposedtest.phone.Shenhua;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
+import test.bluerain.youku.com.xposedtest.utils.MessageContainer;
 import test.bluerain.youku.com.xposedtest.utils.Profile;
 
 /**
@@ -24,6 +25,7 @@ import test.bluerain.youku.com.xposedtest.utils.Profile;
  * Contact:<a href="mailto:8luerain@gmail.com">Contact_me_now</a>
  */
 public class DidiFragment extends android.support.v4.app.Fragment {
+    private static final String TAG = "DidiFragment";
 
     private TextView mTextViewBegain;
 
@@ -70,17 +72,18 @@ public class DidiFragment extends android.support.v4.app.Fragment {
         if (null == Shenhua.sShenhuaUserInfo) {
             Shenhua.login(new Shenhua.LoginListener() {
                 @Override
-                public void loginSuccess(String token) {
+                public void loginSuccess(final String token) {
                     Shenhua.getPhoneNumByItem(Shenhua.DIDI_SEND, token, "1", "", Shenhua.AREA_BEIJING, Shenhua.PHONE_TYPE_RANDOM, new Shenhua
                             .GetPhoneListener() {
                         @Override
-                        public void loginSuccess(List<String> phoneNums) {
+                        public void getPhoneSuccess(List<String> phoneNums) {
                             setGetPhoneNumState(phoneNums.get(0));
+                            MessageContainer.sCurrentPhoneNum = phoneNums.get(0);
                             cleanData();
                         }
 
                         @Override
-                        public void loginFailed(String response) {
+                        public void getPhoneFailed(String response) {
                             setGetPhoneNumFailedState("卧槽，获取号码失败了。。");
                         }
                     });
@@ -96,13 +99,14 @@ public class DidiFragment extends android.support.v4.app.Fragment {
                     .PHONE_TYPE_RANDOM, new Shenhua
                     .GetPhoneListener() {
                 @Override
-                public void loginSuccess(List<String> phoneNums) {
+                public void getPhoneSuccess(List<String> phoneNums) {
                     setGetPhoneNumState(phoneNums.get(0));
+                    MessageContainer.sCurrentPhoneNum = phoneNums.get(0);
                     cleanData();
                 }
 
                 @Override
-                public void loginFailed(String response) {
+                public void getPhoneFailed(String response) {
                     setGetPhoneNumFailedState("卧槽，获取号码失败了。。");
                 }
             });
@@ -140,6 +144,7 @@ public class DidiFragment extends android.support.v4.app.Fragment {
         mProgressBarGetPhone.setVisibility(View.INVISIBLE);
         mProgressBarClearData.setVisibility(View.INVISIBLE);
     }
+
 }
 
 
