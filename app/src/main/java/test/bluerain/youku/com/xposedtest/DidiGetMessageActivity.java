@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import test.bluerain.youku.com.xposedtest.net.NetworkResponseListener;
 import test.bluerain.youku.com.xposedtest.phone.Shenhua;
 import test.bluerain.youku.com.xposedtest.utils.MessageContainer;
@@ -43,10 +46,18 @@ public class DidiGetMessageActivity extends Activity {
     }
 
     private void sendMessage(String messageBody) {
+        String encode = "";
+        try {
+            encode = URLEncoder.encode(messageBody, "UTF-8");
+            Log.d(TAG, "sendMessage: encode[" + encode + "]");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+
+        }
         final String currentPhoneNum = MessageContainer.sCurrentPhoneNum;
         if (TextUtils.isEmpty(currentPhoneNum))
             return;
-        Shenhua.sendMessage(currentPhoneNum, Shenhua.DIDI_SEND, messageBody, Shenhua.sShenhuaUserInfo.token, new NetworkResponseListener() {
+        Shenhua.sendMessage(currentPhoneNum, Shenhua.DIDI_SEND, encode, Shenhua.sShenhuaUserInfo.token, new NetworkResponseListener() {
             @Override
             public void onSuccess(String response) {
                 Shenhua.getMessage(currentPhoneNum, Shenhua.DIDI_SEND, Shenhua.sShenhuaUserInfo.token, new NetworkResponseListener() {
