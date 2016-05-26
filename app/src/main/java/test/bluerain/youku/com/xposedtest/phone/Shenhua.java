@@ -1,10 +1,7 @@
 package test.bluerain.youku.com.xposedtest.phone;
 
 import android.util.Log;
-import android.webkit.URLUtil;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class Shenhua {
     public static final String PHONE_TYPE_CHINA_DINAXIN = "3";
 
     private static final int RETRY_TIMES = 20; //重试次数
-    private static final int RETRY_EVERY_TIME = 3; //每次间隔时间3s
+    private static final int RETRY_EVERY_TIME = 3000; //每次间隔时间3s
 
     private static int retry = 1;
 
@@ -131,10 +128,10 @@ onlyKey	N		私人对接Key，与卡商直接对接
                         phoneNums.add(split[i]);
                     }
                     if (null != getPhoneListener)
-                        getPhoneListener.loginSuccess(phoneNums);
+                        getPhoneListener.getPhoneSuccess(phoneNums);
                 } else {
                     if (null != getPhoneListener)
-                        getPhoneListener.loginFailed(response);
+                        getPhoneListener.getPhoneFailed(response);
                 }
                 Log.d(TAG, "onSuccess: response[" + response + "]");
             }
@@ -142,7 +139,7 @@ onlyKey	N		私人对接Key，与卡商直接对接
             @Override
             public void onFailed(String failMessage) {
                 if (null != getPhoneListener)
-                    getPhoneListener.loginFailed(failMessage);
+                    getPhoneListener.getPhoneFailed(failMessage);
                 Log.d(TAG, "onSuccess: failMessage[" + failMessage + "]");
 
             }
@@ -172,19 +169,24 @@ MSG&项目ID&手机号码&短信内容
 
     public static void getMessage(final String phoneNum, final String itemId, final String token, final NetworkResponseListener getMessageListener) {
         String methodName = "/pubApi/GMessage?";
-        String param = "ItemId=" + itemId + "&token=" + token + "Phone=" + phoneNum;
+        String param = "ItemId=" + itemId + "&token=" + token + "&Phone=" + phoneNum;
         String url = HOST + methodName + param;
         RemoteService.getInstance().doRequest(url, new NetworkResponseListener() {
             @Override
             public void onSuccess(String response) {
-                if (response.contains("Null")) {
+                if (response.contains("False")) {
                     if ((retry++) <= RETRY_TIMES) {
-                        try {
-                            Thread.sleep(RETRY_EVERY_TIME);
-                            getMessage(phoneNum, itemId, token, getMessageListener);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        new Thread(new Runnable() { //防止阻塞主线程！
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(RETRY_EVERY_TIME);
+                                    getMessage(phoneNum, itemId, token, getMessageListener);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
                     } else {
                         retry = 1;
                         if (null != getMessageListener)
@@ -263,8 +265,8 @@ Msg	Y		短信内容
 
     public interface GetPhoneListener {
 
-        void loginSuccess(List<String> phoneNums);
+        void getPhoneSuccess(List<String> phoneNums);
 
-        void loginFailed(String response);
+        void getPhoneFailed(String response);
     }
 }

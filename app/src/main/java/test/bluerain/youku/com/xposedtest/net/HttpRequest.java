@@ -128,6 +128,10 @@ public class HttpRequest implements Runnable {
 
     class HttpRequestHandler extends Handler {
 
+        public HttpRequestHandler() {
+            super();
+        }
+
         public HttpRequestHandler(Looper looper) {
             super(looper);
         }
