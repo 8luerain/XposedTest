@@ -26,4 +26,8 @@ public class Profile {
 
     public static final String defaultPassword = "meiyoumima123";
 
+    public static final String DIDI_CHEAT_SD_DIR = "/storage/emulated/0/cheat/didi";
+
+
+
 }

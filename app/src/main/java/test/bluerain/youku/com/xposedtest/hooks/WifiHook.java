@@ -38,5 +38,18 @@ public class WifiHook extends BaseHook {
                 super.afterHookedMethod(param);
             }
         }));
+        hookInfoList.add(new HookInfo("getMacAddress", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                XposedBridge.log("hook the mac地址 ");
+                param.setResult("a1:11:11:11:11:11");
+                super.afterHookedMethod(param);
+            }
+        }));
     }
 }

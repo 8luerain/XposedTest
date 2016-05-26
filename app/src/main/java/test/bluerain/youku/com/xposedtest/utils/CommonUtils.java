@@ -36,6 +36,9 @@ public class CommonUtils {
 
     private static final String CMD_CLEAR_APP_DATA_SD = "rm -R /storage/emulated/0/Android/*";
 
+    private static final String CMD_CLEAR_DIDI_SD_FILE = "rm -R " + Profile.DIDI_CHEAT_SD_DIR + "/*";
+
+
     private static final String CMD_FORCE_STOP_APP = "am force-stop ";
 
 
@@ -256,6 +259,10 @@ public class CommonUtils {
         return s;
     }
 
+    public static void clearDiDiSDFiles() {
+        String s = do_exec_with_root(CMD_CLEAR_DIDI_SD_FILE);
+        Log.d("TAG", "clear data result is " + s + "..........");
+    }
 
     public static void clearAppData(String packageName) {
         String s = do_exec_with_root(CMD_CLEAR_APP_DATA + packageName);
@@ -321,6 +328,7 @@ public class CommonUtils {
                 CommonUtils.forceStopApp(Profile.DIDI_PACKAGE_NAME);
                 CommonUtils.clearAppData(Profile.DIDI_PACKAGE_NAME);
                 CommonUtils.clearSDFiles();
+                CommonUtils.clearDiDiSDFiles();
                 try {
                     Thread.sleep(6000);
                 } catch (InterruptedException e) {

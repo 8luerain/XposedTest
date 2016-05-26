@@ -1,4 +1,4 @@
-package test.bluerain.youku.com.xposedtest;
+package test.bluerain.youku.com.xposedtest.hooks;
 
 import android.os.Build;
 import android.text.TextUtils;
@@ -13,13 +13,8 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import test.bluerain.youku.com.xposedtest.HookManger;
 import test.bluerain.youku.com.xposedtest.data.RandomBean;
-import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
-import test.bluerain.youku.com.xposedtest.hooks.LocationMangerHook;
-import test.bluerain.youku.com.xposedtest.hooks.RuntimeHook;
-import test.bluerain.youku.com.xposedtest.hooks.SettingHook;
-import test.bluerain.youku.com.xposedtest.hooks.TelephoneHook;
-import test.bluerain.youku.com.xposedtest.hooks.WifiHook;
 import test.bluerain.youku.com.xposedtest.utils.CommonUtils;
 import test.bluerain.youku.com.xposedtest.utils.Profile;
 
@@ -34,14 +29,10 @@ public class Wori implements IXposedHookLoadPackage {
 
     public RandomBean bean;
 
-    public Wori() {
-        Log.d("TAG", "Wori class created ......................");
-    }
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 //        XposedBridge.log("loading -------> " + loadPackageParam.packageName +" & pid is " + android.os.Process.myPid());
-        Log.d("process ", "loading -------> " + loadPackageParam.packageName + " & pid is " + android.os.Process.myPid());
+//        Log.d("process ", "loading -------> " + loadPackageParam.packageName + " & pid is " + android.os.Process.myPid());
 
 //        if (!TextUtils.equals(loadPackageParam.packageName, "test.bluerain.youku.com.des"))
 //        if (!TextUtils.equals(loadPackageParam.packageName, "com.autonavi.minima"))  //高德地图
@@ -62,7 +53,8 @@ public class Wori implements IXposedHookLoadPackage {
         HookManger.addHooks(new WifiHook());
         HookManger.addHooks(new SettingHook());
         HookManger.addHooks(new LocationMangerHook());
-//        HookManger.addHooks(new SDCardStatuHook());
+        HookManger.addHooks(new SDCardStatuHook());
+        HookManger.addHooks(new EnvironmentHook());
 
 //        HookManger.addHooks(new FileOutputStreamHook());
 //        HookManger.addHooks(new OutputStreamHook());
@@ -72,7 +64,7 @@ public class Wori implements IXposedHookLoadPackage {
     }
 
 
-    class FileHandler extends XC_MethodHook {
+    public static class FileHandler extends XC_MethodHook {
         public static final String filePath = "storage/emulated/0/uber_save_file";
         private FileWriter writer;
 

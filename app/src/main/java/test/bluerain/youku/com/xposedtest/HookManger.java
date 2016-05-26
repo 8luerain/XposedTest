@@ -10,6 +10,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import test.bluerain.youku.com.xposedtest.data.HookInfo;
 import test.bluerain.youku.com.xposedtest.hooks.BaseHook;
+import test.bluerain.youku.com.xposedtest.hooks.Wori;
 
 /**
  * Project: XposedTest.
