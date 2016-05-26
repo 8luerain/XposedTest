@@ -49,7 +49,7 @@ public class Shenhua {
     public static final String PHONE_TYPE_CHINA_UNION = "2";
     public static final String PHONE_TYPE_CHINA_DINAXIN = "3";
 
-    private static final int RETRY_TIMES = 20; //重试次数
+    private static final int RETRY_TIMES = 30; //重试次数
     private static final int RETRY_EVERY_TIME = 3000; //每次间隔时间3s
 
     private static int retry = 1;
