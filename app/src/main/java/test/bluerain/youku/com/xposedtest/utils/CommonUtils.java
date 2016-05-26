@@ -2,6 +2,7 @@ package test.bluerain.youku.com.xposedtest.utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -311,6 +312,25 @@ public class CommonUtils {
         return mypDialog;
     }
 
+    public static void didiEverythingNew(final Activity activityContext) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CommonUtils.changeAirplaneOn();
+                CommonUtils.changeAirplaneOff();
+                CommonUtils.forceStopApp(Profile.DIDI_PACKAGE_NAME);
+                CommonUtils.clearAppData(Profile.DIDI_PACKAGE_NAME);
+                CommonUtils.clearSDFiles();
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                CommonUtils.launchApp(activityContext, Profile.DIDI_PACKAGE_NAME);
+            }
+        }).start();
+    }
+
     public static void uberEverythingNew(final Activity activityContext, String msg) {
         final ProgressDialog progressDialog = CommonUtils.createProgressDialog(activityContext, msg);
         progressDialog.show();
@@ -340,5 +360,31 @@ public class CommonUtils {
 
     public static void clearSDFiles() {
         do_exec_with_root("rm -Rf " + Profile.sSDFiles);
+    }
+
+
+    /**
+     * 实现文本复制功能
+     * add by wangqianzhou
+     *
+     * @param content
+     */
+    public static void copy(String content, Context context) {
+// 得到剪贴板管理器
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        cmb.setText(content.trim());
+    }
+
+    /**
+     * 实现粘贴功能
+     * add by wangqianzhou
+     *
+     * @param context
+     * @return
+     */
+    public static String paste(Context context) {
+// 得到剪贴板管理器
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        return cmb.getText().toString().trim();
     }
 }

@@ -10,6 +10,8 @@ public class Profile {
 
     public static final String UBER_PACKAGE_NAME = "com.ubercab";
 
+    public static final String DIDI_PACKAGE_NAME = "com.sdu.didi.psnger";
+
     public static final String sRandomFile = "/storage/emulated/0/uber_random";
 
     public static final String sSDFiles = "/storage/emulated/0/Android/*";
