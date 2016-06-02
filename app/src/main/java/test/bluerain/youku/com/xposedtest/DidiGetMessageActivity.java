@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,9 @@ import test.bluerain.youku.com.xposedtest.utils.MessageContainer;
 public class DidiGetMessageActivity extends Activity {
     private static final String TAG = "DidiGetMessageActivity";
     private TextView mTextViewMessageBody;
+    private TextView mTextViewStatus;
+    private ProgressBar mProgressBarStatus;
+
 
     private String mMessageBody;
 
@@ -41,6 +46,8 @@ public class DidiGetMessageActivity extends Activity {
     }
 
     private void initView() {
+        mTextViewStatus = (TextView) findViewById(R.id.id_txv_send_message_status);
+        mProgressBarStatus = (ProgressBar) findViewById(R.id.progressBar_send_message_status);
         mTextViewMessageBody = (TextView) findViewById(R.id.id_txv_get_message_body);
         mTextViewMessageBody.setText(mMessageBody);
     }
@@ -63,13 +70,15 @@ public class DidiGetMessageActivity extends Activity {
                 Shenhua.getMessage(currentPhoneNum, Shenhua.DIDI_SEND, Shenhua.sShenhuaUserInfo.token, new NetworkResponseListener() {
                     @Override
                     public void onSuccess(String response) {
+                        setGetMessageSuccess();
                         Toast.makeText(DidiGetMessageActivity.this, "已经成功，请返回滴滴！", Toast.LENGTH_LONG).show();
-                        setResult(1);
+                        setResult(RESULT_OK);
                         finish();
                     }
 
                     @Override
                     public void onFailed(String failMessage) {
+                        setGetMessageFailed();
                         Toast.makeText(DidiGetMessageActivity.this, "发送失败，请重试！", Toast.LENGTH_LONG).show();
                         finish();
                     }
@@ -78,8 +87,21 @@ public class DidiGetMessageActivity extends Activity {
 
             @Override
             public void onFailed(String failMessage) {
+                setGetMessageFailed();
                 Toast.makeText(DidiGetMessageActivity.this, "我擦，提交手机号时竟然出错了，请重试！", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void setGetMessageSuccess() {
+        mTextViewStatus.setText("已经成功，请返回滴滴");
+        mTextViewStatus.setVisibility(View.VISIBLE);
+        mProgressBarStatus.setVisibility(View.INVISIBLE);
+    }
+
+    private void setGetMessageFailed() {
+        mTextViewStatus.setText("发送失败，请重试！");
+        mTextViewStatus.setVisibility(View.VISIBLE);
+        mProgressBarStatus.setVisibility(View.INVISIBLE);
     }
 }

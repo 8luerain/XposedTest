@@ -44,7 +44,7 @@ public class Shenhua {
     public static final String AREA_BEIJING = "%E5%8C%97%E4%BA%AC";
 
     /*PhoneType*/
-    public static final String PHONE_TYPE_RANDOM = "0";
+    public static final String PHONE_TYPE_RANDOM = "2";
     public static final String PHONE_TYPE_CMCC = "1";
     public static final String PHONE_TYPE_CHINA_UNION = "2";
     public static final String PHONE_TYPE_CHINA_DINAXIN = "3";
